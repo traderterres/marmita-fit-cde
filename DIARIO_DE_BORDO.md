@@ -1294,6 +1294,25 @@
      - Arquivo `vercel.json` configurado com `"name": "nutyva-fit-cde"` e cache imutável de 1 ano.
      - Como os arquivos já estão na branch `main` do GitHub, basta conectar ou vincular o repositório no dashboard da Vercel para geração contínua do domínio.
 
+---
+
+### Sessão 54 (19/09/2026 - Manhã): Implementação da Escassez Artesanal & Preservação do Funil de WhatsApp
+- **Diretrizes do Usuário (Áudio):**
+  - Conduzir o visitante a entender que a comida é escassa e limitada para preservar a máxima qualidade, mantendo o objetivo central do site de lançar diretamente para o WhatsApp onde o operador fará o encaixe na agenda/fila.
+- **Ações Implementadas:**
+  1. **Barra Superior de Aviso (`top-announcement`):**
+     - Destaque em PT e ES: `🌿 Cozinha Artesanal no Edifício Level · Capacidade limitada a 25 kits por ciclo semanal para manter o padrão gastronômico · Ciudad del Este`.
+  2. **Hero Subtexto:**
+     - Enfatizado que o preparo é sob agendamento semanal com vagas estritamente limitadas por lote.
+  3. **Seção de Kits (`#kits`):**
+     - Cabeçalho reformulado: *"A gente não tem estoque de fábrica. Tem agenda."* com justificativa de que a compra dos ingredientes frescos é feita após o fechamento dos pedidos.
+     - Novo banner visual de escassez (`.scarcity-callout-banner`) com pulso luminoso: *"Lote Semanal Concorrido: Atendemos por ordem de reserva no WhatsApp até o preenchimento da capacidade da cozinha."*
+     - Botões de ação alinhados com o desejo: *"Garantir Vaga no Kit 5/10/20 📲"* e *"Asegurar Cupo en Kit 5/10/20 📲"*, mantendo o envio direto com o WhatsApp preenchido.
+  4. **FAQ (Dúvidas Frequentes):**
+     - Nova pergunta e resposta em PT e ES explicando transparentemente por que a produção atende exclusivamente 25 famílias por semana (diferenciação da comida industrial congelada de supermercado vs cozinha artesanal do Edifício Level).
+- **Status do Git:** **Nenhum comando git executado** até a aprovação formal do usuário.
+
+
 
 
 
