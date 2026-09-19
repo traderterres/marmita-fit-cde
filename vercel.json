@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "name": "marmitafitcde",
+  "name": "nutyva-fit-cde",
   "cleanUrls": true,
   "trailingSlash": false,
   "headers": [
@@ -8,12 +8,18 @@
       "source": "/(.*)",
       "headers": [
         { "key": "X-Content-Type-Options", "value": "nosniff" },
-        { "key": "X-Frame-Options", "value": "DENY" },
+        { "key": "X-Frame-Options", "value": "SAMEORIGIN" },
         { "key": "X-XSS-Protection", "value": "1; mode=block" }
       ]
     },
     {
       "source": "/assets/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    },
+    {
+      "source": "/(.*).(png|jpg|jpeg|webp|ico|svg|mp4|webm)",
       "headers": [
         { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
       ]

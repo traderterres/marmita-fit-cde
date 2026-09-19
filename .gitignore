@@ -6,3 +6,8 @@
 scratch/
 node_modules/
 .vercel
+audit_screens/
+backup_versao_anterior/
+scripts/
+assets/criativos/*.mp4
+*.code-workspace

@@ -1,369 +1,255 @@
-// Marmitas Gourmet CDE - Core Controller
-// Alta Gastronomia Caseira & Alta Conversão em Ciudad del Este
+// NUTYVA® Alimentação Saudável / NUTYVA® Alimentación Saludable — Cozinha Artesanal & Ultracongelamento
+// Script de Interações e Integração com WhatsApp
 
+// ==========================================================================
 // CONFIGURAÇÃO DO WHATSAPP DE ATENDIMENTO
-// Altere para o número de WhatsApp que atenderá os clientes (sem espaços ou caracteres especiais):
-// Ex: "595981xxxxxx" para linha paraguaia ou "5545xxxxxxxxx" para linha brasileira em Foz/CDE
-const WHATSAPP_PHONE = "595981000000";
-
-let currentLang = 'pt';
-let selectedPackage = {
-  size: 10,
-  priceBRL: 239,
-  pricePYG: "299.000 Gs",
-  name: "Kit 10 Potes Gourmet (Almoço + Jantar)"
-};
-
-const I18N = {
-  pt: {
-    hero_title: "Comida caseira de verdade. <br><em>Suculenta, saudável e pronta em 4 minutos.</em>",
-    hero_subtitle: "Almoce e jante pratos clássicos brasileiros preparados sem óleos inflamatórios e calculados por Nutricionista. O sabor autêntico da fazenda por <strong>menos de R$ 20 por refeição</strong> (~24.900 Gs), entregue na sua porta em Ciudad del Este.",
-    hero_cta: "Garantir Vaga no Meu Kit Semanal"
-  },
-  es: {
-    hero_title: "Comida casera de verdad. <br><em>Jugosa, saludable y lista en 4 minutos.</em>",
-    hero_subtitle: "Almorzá y cená platos clásicos brasileños preparados sin aceites inflamatorios y calculados por Nutricionista. El auténtico sabor casero por <strong>menos de 24.900 Gs por comida</strong>, entregado en tu puerta en Ciudad del Este.",
-    hero_cta: "Asegurar Cupo en Mi Kit Semanal"
-  }
-};
+// ==========================================================================
+const WHATSAPP_PHONE = "5551981338580";
 
 document.addEventListener("DOMContentLoaded", () => {
-  initLanguageToggle();
-  initPlanSelection();
-  initCustomScroll();
-  initFormCustomization();
-  initReservationForm();
-  initAdminPanel();
-  updateBadgeCount();
+  initOrderForm();
+  initLanguageSelector();
+  initStickyNav();
+  initVideoTrigger();
+  initRealDishesCarousel();
+  initDynamicWhatsAppLinks();
 });
 
-// Language Switcher
-function initLanguageToggle() {
-  const btns = document.querySelectorAll(".lang-toggle");
-  btns.forEach(btn => {
-    btn.addEventListener("click", () => {
-      btns.forEach(b => b.classList.remove("active"));
-      btn.classList.add("active");
-      currentLang = btn.dataset.lang;
-      applyLanguage(currentLang);
-    });
-  });
-}
-
-function applyLanguage(lang) {
-  const t = I18N[lang];
-  if (!t) return;
-  const title = document.getElementById("lbl-hero-title");
-  const sub = document.getElementById("lbl-hero-subtitle");
-  const cta = document.getElementById("btn-hero-cta");
-
-  if (title) title.innerHTML = t.hero_title;
-  if (sub) sub.innerHTML = t.hero_subtitle;
-  if (cta) cta.textContent = t.hero_cta;
-}
-
-// Plan Selection & Direct WhatsApp Orders
-function initPlanSelection() {
-  const cards = document.querySelectorAll(".plan-card");
-
-  // Botões de envio direto para o WhatsApp em cada pacote
-  const waButtons = document.querySelectorAll(".btn-pkg-wa");
-  waButtons.forEach(btn => {
-    btn.addEventListener("click", (e) => {
-      e.stopPropagation(); // Não dispara o evento de clique do card
-      const card = btn.closest(".plan-card");
-      if (!card) return;
-
-      const pkgSize = card.dataset.package;
-      const pkgPriceBRL = parseFloat(card.dataset.price);
-      const pkgPricePYG = card.dataset.pyg;
-      const pkgTitle = card.querySelector("h3")?.textContent || `Kit ${pkgSize} Potes`;
-      const pkgLabel = card.querySelector(".plan-label")?.textContent || "";
-
-      // Salva métrica de intenção de compra rápida no localStorage
-      let leads = JSON.parse(localStorage.getItem("marmitas_gourmet_cde_leads") || "[]");
-      leads.unshift({
-        id: Date.now(),
-        date: new Date().toLocaleString('pt-BR'),
-        name: "Lead Direto (Botão do Pacote)",
-        phone: "Via WhatsApp",
-        location: "A confirmar",
-        address: "A confirmar",
-        orderMode: "Direto pelo Card do Pacote",
-        dietPreferences: "Cardápio padrão da semana",
-        notes: `Interesse direto no ${pkgTitle}`,
-        package: `${pkgTitle} (${pkgLabel})`,
-        totalBrl: pkgPriceBRL,
-        totalPyg: pkgPricePYG
-      });
-      localStorage.setItem("marmitas_gourmet_cde_leads", JSON.stringify(leads));
-      updateBadgeCount();
-
-      // Monta mensagem do pacote específico com foco em reserva de vaga
-      const waMsg = `Olá! Vi o site e quero agendar meu pedido do *${pkgTitle}* (${pkgLabel}) por R$ ${pkgPriceBRL.toFixed(2).replace('.', ',')} (~ ${pkgPricePYG})!\n\n` +
-        `Ainda restam vagas disponíveis para o próximo lote de entrega em Ciudad del Este?`;
-
-      btn.textContent = "✓ Abrindo WhatsApp...";
-      btn.style.backgroundColor = "#16a34a";
-
-      const waUrl = `https://api.whatsapp.com/send?phone=${WHATSAPP_PHONE}&text=${encodeURIComponent(waMsg)}`;
-      setTimeout(() => {
-        window.location.href = waUrl;
-        setTimeout(() => {
-          btn.textContent = `Pedir Kit ${pkgSize} no WhatsApp 📲`;
-          btn.style.backgroundColor = "";
-        }, 2000);
-      }, 350);
-    });
-  });
-
-  // Botões e clique nos cards para selecionar e personalizar no formulário abaixo
-  cards.forEach(card => {
-    const handleCardSelection = () => {
-      cards.forEach(c => c.classList.remove("active"));
-      card.classList.add("active");
-
-      selectedPackage = {
-        size: parseInt(card.dataset.package),
-        priceBRL: parseFloat(card.dataset.price),
-        pricePYG: card.dataset.pyg,
-        name: card.querySelector("h3").textContent + " (" + card.querySelector(".plan-label").textContent + ")"
-      };
-
-      // Atualiza a barra de resumo do formulário
-      const sumPkg = document.getElementById("sum-pkg-name");
-      const sumBrl = document.getElementById("sum-brl-text");
-      const sumPyg = document.getElementById("sum-pyg-text");
-
-      if (sumPkg) sumPkg.textContent = selectedPackage.name;
-      if (sumBrl) sumBrl.textContent = `R$ ${selectedPackage.priceBRL.toFixed(2).replace('.', ',')}`;
-      if (sumPyg) sumPyg.textContent = `~ ${selectedPackage.pricePYG} Guaranis`;
-    };
-
-    card.addEventListener("click", () => {
-      handleCardSelection();
-    });
-
-    const custBtn = card.querySelector(".btn-pkg-customize");
-    if (custBtn) {
-      custBtn.addEventListener("click", (e) => {
-        e.stopPropagation();
-        handleCardSelection();
-        const formEl = document.getElementById("reservation-form");
-        if (formEl) {
-          formEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-      });
-    }
-  });
-}
-
-// Quick Scroll to Custom Options
-function initCustomScroll() {
-  const btnCustom = document.getElementById("btn-custom-scroll");
-  if (btnCustom) {
-    btnCustom.addEventListener("click", (e) => {
-      e.preventDefault();
-      // Select the custom radio
-      const customRadio = document.querySelector('input[name="order-mode"][value="custom"]');
-      if (customRadio) {
-        customRadio.checked = true;
-        customRadio.dispatchEvent(new Event('change'));
-      }
-      const orderSection = document.getElementById("pedidos");
-      if (orderSection) {
-        orderSection.scrollIntoView({ behavior: 'smooth' });
-      }
-    });
-  }
-}
-
-// Form Customization Mode & Tags
-function initFormCustomization() {
-  const modeRadios = document.querySelectorAll('input[name="order-mode"]');
-  const prefPanel = document.getElementById("diet-preferences-panel");
-  const modeCards = document.querySelectorAll(".mode-option-card");
-
-  modeRadios.forEach(radio => {
-    radio.addEventListener("change", () => {
-      modeCards.forEach(card => card.classList.remove("active"));
-      radio.closest(".mode-option-card")?.classList.add("active");
-
-      if (radio.value === "custom") {
-        prefPanel?.classList.add("active");
+// Suporte a seletores dinâmicos de idioma se presentes
+function initLanguageSelector() {
+  const toggles = document.querySelectorAll(".lang-toggle");
+  if (!toggles || toggles.length === 0) return;
+  toggles.forEach(toggle => {
+    toggle.addEventListener("click", () => {
+      const lang = toggle.getAttribute("data-lang");
+      if (lang === "es") {
+        window.location.href = window.location.pathname.includes("/es/") ? "index.html" : "es/index.html";
       } else {
-        prefPanel?.classList.remove("active");
-      }
-    });
-  });
-
-  const dietCheckboxes = document.querySelectorAll('.diet-tag-checkbox input[type="checkbox"]');
-  dietCheckboxes.forEach(cb => {
-    cb.addEventListener("change", () => {
-      const parent = cb.closest(".diet-tag-checkbox");
-      if (cb.checked) {
-        parent?.classList.add("checked");
-      } else {
-        parent?.classList.remove("checked");
+        window.location.href = window.location.pathname.includes("/es/") ? "../index.html" : "index.html";
       }
     });
   });
 }
 
-// Reservation Form Submission - Direct to WhatsApp
-function initReservationForm() {
-  const form = document.getElementById("reservation-form");
-  const submitBtn = document.getElementById("btn-submit-order");
+function initVideoTrigger() {
+  const playBtn = document.getElementById("btn-video-trigger");
+  if (!playBtn) return;
 
+  playBtn.addEventListener("click", () => {
+    alert("📹 Demonstração de Suculência e Textura Real (20s sem edição):\n\nAqui entrará o vídeo gravado mostrando o pote saindo do freezer, os 4 min de micro-ondas e o garfo entrando na alcatra macia e no feijão cremoso sem água no prato.\n\nPara colocar o vídeo real, basta substituir a tag pela sua filmagem em .mp4!");
+  });
+}
+
+// 1. Gerador de Pedido via WhatsApp com Mensagem 100% Personalizada
+function initOrderForm() {
+  const form = document.getElementById("order-builder-form");
   if (!form) return;
 
   form.addEventListener("submit", (e) => {
     e.preventDefault();
 
-    const name = document.getElementById("order-name").value.trim();
-    const phone = document.getElementById("order-phone").value.trim();
-    const location = document.getElementById("order-location").value;
-    const address = document.getElementById("order-address").value.trim();
-    const notes = document.getElementById("order-notes").value.trim();
+    const name = document.getElementById("f-name")?.value.trim() || "";
+    const bairro = document.getElementById("f-bairro")?.value || "A combinar em CDE";
+    const kit = document.getElementById("f-kit")?.value || "Kit da Semana";
+    
+    // Objetivo da Dieta
+    const objetivoRadio = document.querySelector('input[name="f-objetivo"]:checked');
+    const objetivo = objetivoRadio ? objetivoRadio.value : "Manutenção & Comer Bem";
 
-    const selectedMode = document.querySelector('input[name="order-mode"]:checked')?.value || 'standard';
-    const checkedTags = Array.from(document.querySelectorAll('input[name="diet-pref"]:checked')).map(cb => cb.value);
+    // Preferência de Proteínas
+    const proteinaRadio = document.querySelector('input[name="f-proteina"]:checked');
+    const proteina = proteinaRadio ? proteinaRadio.value : "Variado";
 
-    const isCustom = selectedMode === 'custom';
-    const modeLabel = isCustom ? "Montado para Minha Dieta" : "Cardápio Variado da Semana";
+    // Preferência de Carboidratos/Base
+    const carboRadio = document.querySelector('input[name="f-carbo"]:checked');
+    const carbo = carboRadio ? carboRadio.value : "Tradicional";
 
-    const newLead = {
-      id: Date.now(),
-      date: new Date().toLocaleString('pt-BR'),
-      name,
-      phone,
-      location,
-      address,
-      orderMode: modeLabel,
-      dietPreferences: checkedTags.length > 0 ? checkedTags.join(", ") : "Nenhuma tag específica",
-      notes: notes || "Nenhuma observação informada",
-      package: selectedPackage.name,
-      totalBrl: selectedPackage.priceBRL,
-      totalPyg: selectedPackage.pricePYG
-    };
+    // Tags de dieta e restrições
+    const checkedTags = Array.from(document.querySelectorAll('input[name="f-diet"]:checked'))
+      .map(cb => cb.value);
+    const dieta = checkedTags.length > 0 ? checkedTags.join(", ") : "Sem restrições adicionais";
 
-    // Save lead in local store
-    let leads = JSON.parse(localStorage.getItem("marmitas_gourmet_cde_leads") || "[]");
-    leads.unshift(newLead);
-    localStorage.setItem("marmitas_gourmet_cde_leads", JSON.stringify(leads));
-    updateBadgeCount();
+    // Observações e gramaturas da nutri
+    const obs = document.getElementById("f-obs")?.value.trim() || "Nenhuma observação extra";
 
-    // Visual Feedback on Button
+    // Formato rico, claro e profissional para o WhatsApp:
+    const message = `Olá! Acabei de montar minha dieta e pedido no site da NUTYVA® Alimentação Saudável:
+👤 *Nome:* ${name}
+📍 *Bairro / Região:* ${bairro}
+📦 *Quantidade:* ${kit}
+🎯 *Objetivo:* ${objetivo}
+🥩 *Proteínas:* ${proteina}
+🍚 *Base / Carbo:* ${carbo}
+🥗 *Cuidados / Restrições:* ${dieta}
+📝 *Gramaturas / Detalhes:* ${obs}
+
+Gostaria de confirmar se ainda restam vagas no lote artesanal desta semana!`;
+
+    const waUrl = `https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(message)}`;
+
+    // Feedback visual no botão
+    const submitBtn = document.getElementById("btn-submit-form");
     if (submitBtn) {
-      submitBtn.disabled = true;
-      submitBtn.textContent = "✓ Abrindo WhatsApp Oficial...";
-      submitBtn.style.backgroundColor = "#16a34a";
+      const originalHtml = submitBtn.innerHTML;
+      submitBtn.innerHTML = "<span>✓ Abrindo WhatsApp...</span>";
+      submitBtn.style.backgroundColor = "#25D366";
+      
+      setTimeout(() => {
+        submitBtn.innerHTML = originalHtml;
+        submitBtn.style.backgroundColor = "";
+      }, 3000);
     }
 
-    // Build Structured WhatsApp message
-    let waMsg = `Olá! Gostaria de agendar a pré-reserva do meu kit de marmitas pelo site:\n\n` +
-      `📦 PACOTE ESCOLHIDO: ${selectedPackage.name}\n` +
-      `💰 VALOR: R$ ${selectedPackage.priceBRL.toFixed(2).replace('.', ',')} (~ ${selectedPackage.pricePYG})\n` +
-      `🍽️ PREFERÊNCIA: ${modeLabel}\n`;
+    // Abre o WhatsApp
+    window.open(waUrl, "_blank");
+  });
 
-    if (isCustom && checkedTags.length > 0) {
-      waMsg += `🥑 DIRETRIZES/DIETA: ${checkedTags.join(", ")}\n`;
+  // Formulário em Espanhol
+  const formEs = document.getElementById("order-builder-form-es");
+  if (!formEs) return;
+
+  formEs.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    const name = document.getElementById("f-name-es")?.value.trim() || "";
+    const bairro = document.getElementById("f-bairro-es")?.value || "A coordinar en CDE";
+    const kit = document.getElementById("f-kit-es")?.value || "Kit de la Semana";
+    
+    const objetivoRadio = document.querySelector('input[name="f-objetivo-es"]:checked');
+    const objetivo = objetivoRadio ? objetivoRadio.value : "Mantenimiento & Comer Saludable";
+
+    const proteinaRadio = document.querySelector('input[name="f-proteina-es"]:checked');
+    const proteina = proteinaRadio ? proteinaRadio.value : "Variado";
+
+    const carboRadio = document.querySelector('input[name="f-carbo-es"]:checked');
+    const carbo = carboRadio ? carboRadio.value : "Tradicional";
+
+    const checkedTags = Array.from(document.querySelectorAll('input[name="f-diet-es"]:checked'))
+      .map(cb => cb.value);
+    const dieta = checkedTags.length > 0 ? checkedTags.join(", ") : "Sin restricciones adicionales";
+
+    const obs = document.getElementById("f-obs-es")?.value.trim() || "Ninguna indicación extra";
+
+    const message = `¡Hola! Acabo de armar mi dieta y pedido en la web de NUTYVA® Alimentación Saludable:
+👤 *Nombre:* ${name}
+📍 *Zona / Barrio:* ${bairro}
+📦 *Cantidad:* ${kit}
+🎯 *Objetivo:* ${objetivo}
+🥩 *Proteínas:* ${proteina}
+🍚 *Base / Carbohidratos:* ${carbo}
+🥗 *Cuidados / Restricciones:* ${dieta}
+📝 *Porciones / Detalles:* ${obs}
+
+¿Aún quedan cupos disponibles en el lote artesanal de esta semana?`;
+
+    const waUrl = `https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(message)}`;
+
+    const submitBtn = document.getElementById("btn-submit-form-es");
+    if (submitBtn) {
+      const originalHtml = submitBtn.innerHTML;
+      submitBtn.innerHTML = "<span>✓ Abriendo WhatsApp...</span>";
+      submitBtn.style.backgroundColor = "#25D366";
+      
+      setTimeout(() => {
+        submitBtn.innerHTML = originalHtml;
+        submitBtn.style.backgroundColor = "";
+      }, 3000);
     }
 
-    waMsg += `👤 NOME: ${name}\n` +
-      `📍 REGIÃO EM CDE: ${location}\n` +
-      `🏠 ENDEREÇO: ${address}\n` +
-      `📱 WHATSAPP: ${phone}\n` +
-      `📝 OBSERVAÇÕES: ${notes || 'Nenhuma'}\n\n` +
-      `Quero garantir minha vaga no próximo lote semanal com 15% OFF!`;
-
-    const waUrl = `https://api.whatsapp.com/send?phone=${WHATSAPP_PHONE}&text=${encodeURIComponent(waMsg)}`;
-
-    // Redireciona diretamente para o WhatsApp sem fricção
-    setTimeout(() => {
-      window.location.href = waUrl;
-    }, 450);
+    window.open(waUrl, "_blank");
   });
 }
 
-// Admin Panel Controller
-function initAdminPanel() {
-  const openBtn = document.getElementById("btn-open-admin");
-  const closeBtn = document.getElementById("btn-close-admin");
-  const modal = document.getElementById("modal-admin");
-  const clearBtn = document.getElementById("btn-clear-leads");
-  const copyBtn = document.getElementById("btn-copy-leads");
+// 3. Efeito sutil no scroll para a barra de navegação
+function initStickyNav() {
+  const nav = document.getElementById("main-nav");
+  if (!nav) return;
 
-  if (openBtn && modal) {
-    openBtn.addEventListener("click", () => {
-      renderAdminLeads();
-      modal.classList.add("open");
-    });
-  }
+  window.addEventListener("scroll", () => {
+    if (window.scrollY > 30) {
+      nav.style.boxShadow = "0 4px 20px rgba(26, 26, 26, 0.08)";
+    } else {
+      nav.style.boxShadow = "none";
+    }
+  }, { passive: true });
+}
 
-  if (closeBtn && modal) {
-    closeBtn.addEventListener("click", () => {
-      modal.classList.remove("open");
-    });
-  }
+// 4. Carrossel Interativo Mobile / Desktop de Pratos Reais
+function initRealDishesCarousel() {
+  const track = document.getElementById("dishes-carousel-track");
+  const prevBtn = document.getElementById("carousel-prev-btn");
+  const nextBtn = document.getElementById("carousel-next-btn");
+  const dotsContainer = document.getElementById("carousel-dots-container");
 
-  if (clearBtn) {
-    clearBtn.addEventListener("click", () => {
-      if (confirm("Deseja apagar todos os registros de teste salvos?")) {
-        localStorage.removeItem("marmitas_gourmet_cde_leads");
-        renderAdminLeads();
-        updateBadgeCount();
-      }
-    });
-  }
+  if (!track) return;
 
-  if (copyBtn) {
-    copyBtn.addEventListener("click", () => {
-      const raw = localStorage.getItem("marmitas_gourmet_cde_leads") || "[]";
-      navigator.clipboard.writeText(raw).then(() => {
-        alert("Lista copiada com sucesso para a área de transferência!");
+  const cards = Array.from(track.querySelectorAll(".carousel-dish-card"));
+  if (cards.length === 0) return;
+
+  // Criar dots indicadores
+  if (dotsContainer) {
+    dotsContainer.innerHTML = "";
+    cards.forEach((_, idx) => {
+      const dot = document.createElement("button");
+      dot.className = `carousel-dot ${idx === 0 ? "active" : ""}`;
+      dot.setAttribute("aria-label", `Ver prato ${idx + 1}`);
+      dot.addEventListener("click", () => {
+        cards[idx].scrollIntoView({ behavior: "smooth", inline: "start", block: "nearest" });
       });
+      dotsContainer.appendChild(dot);
+    });
+  }
+
+  // Atualizar dot ativo conforme o scroll
+  let scrollTimeout;
+  track.addEventListener("scroll", () => {
+    clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(() => {
+      const trackRect = track.getBoundingClientRect();
+      let closestIdx = 0;
+      let minDiff = Infinity;
+
+      cards.forEach((card, idx) => {
+        const cardRect = card.getBoundingClientRect();
+        const diff = Math.abs(cardRect.left - trackRect.left);
+        if (diff < minDiff) {
+          minDiff = diff;
+          closestIdx = idx;
+        }
+      });
+
+      const dots = dotsContainer ? dotsContainer.querySelectorAll(".carousel-dot") : [];
+      dots.forEach((d, idx) => {
+        d.classList.toggle("active", idx === closestIdx);
+      });
+    }, 60);
+  }, { passive: true });
+
+  // Botões de navegação
+  if (prevBtn) {
+    prevBtn.addEventListener("click", () => {
+      const cardWidth = cards[0].offsetWidth + 18;
+      track.scrollBy({ left: -cardWidth, behavior: "smooth" });
+    });
+  }
+
+  if (nextBtn) {
+    nextBtn.addEventListener("click", () => {
+      const cardWidth = cards[0].offsetWidth + 18;
+      track.scrollBy({ left: cardWidth, behavior: "smooth" });
     });
   }
 }
 
-function updateBadgeCount() {
-  const leads = JSON.parse(localStorage.getItem("marmitas_gourmet_cde_leads") || "[]");
-  const badge = document.getElementById("count-badge");
-  if (badge) badge.textContent = leads.length;
-}
-
-function renderAdminLeads() {
-  const container = document.getElementById("admin-leads-list");
-  if (!container) return;
-  const leads = JSON.parse(localStorage.getItem("marmitas_gourmet_cde_leads") || "[]");
-
-  if (leads.length === 0) {
-    container.innerHTML = `<p style="color: #78716c; font-size: 0.85rem; padding: 10px;">Nenhuma reserva registrada ainda. Faça um teste pelo formulário da página!</p>`;
-    return;
-  }
-
-  container.innerHTML = "";
-  leads.forEach(lead => {
-    const el = document.createElement("div");
-    el.className = "lead-entry";
-    el.innerHTML = `
-      <div class="lead-entry-top">
-        <span>${lead.name} (${lead.location})</span>
-        <span style="color: #234338;">R$ ${lead.totalBrl.toFixed(2)}</span>
-      </div>
-      <div class="lead-entry-meta">
-        WhatsApp: ${lead.phone} • Data: ${lead.date}<br>
-        Plano: ${lead.package}<br>
-        Modo: <strong>${lead.orderMode || 'Padrão'}</strong><br>
-        ${lead.dietPreferences && lead.dietPreferences !== 'Nenhuma tag específica' ? `Diretrizes: <em>${lead.dietPreferences}</em><br>` : ''}
-        Endereço: ${lead.address}<br>
-        Notas: ${lead.notes}
-      </div>
-      <a href="https://api.whatsapp.com/send?phone=${lead.phone.replace(/\D/g,'')}&text=Olá%20${encodeURIComponent(lead.name.split(' ')[0])}!%20Tudo%20bem?%20Aqui%20é%20da%20equipe%20das%20Marmitas%20Gourmet%20CDE." target="_blank" class="btn-wa-direct">
-        Chamar no WhatsApp
-      </a>
-    `;
-    container.appendChild(el);
+// 5. Links Dinâmicos de WhatsApp
+function initDynamicWhatsAppLinks() {
+  document.querySelectorAll("[data-wa-dish]").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      e.preventDefault();
+      const dishName = btn.getAttribute("data-wa-dish") || "este prato do cardápio semanal";
+      const message = `Olá! Vi o prato *"${dishName}"* no carrossel do site e gostaria de saber se ele está no lote desta semana para incluir no meu kit!`;
+      const waUrl = `https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(message)}`;
+      window.open(waUrl, "_blank");
+    });
   });
 }
