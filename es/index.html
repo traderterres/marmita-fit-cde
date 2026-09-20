@@ -13,13 +13,27 @@
   <meta name="apple-mobile-web-app-title" content="Nutyva">
   <link rel="manifest" href="site.webmanifest">
   
-  <!-- Tipografía optimizada de alto rendimiento: Fraunces + Inter -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;700&family=Inter:wght@400;500;600;700&display=swap">
-  
   <link rel="stylesheet" href="../style.css?v=showcase-video-v1">
+
+  <!-- Meta Pixel Code Oficial - Pixel Marmita Fit -->
+  <script>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '2242030616369158');
+  fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=2242030616369158&ev=PageView&noscript=1"
+  /></noscript>
+  <!-- End Meta Pixel Code -->
 </head>
+
 <body>
 
   <!-- BARRA SUPERIOR DE AVISO CON STATUS DE CUPOS -->
@@ -30,11 +44,11 @@
         <span>🌿 Cocina Artesanal en el <strong>Edificio Level</strong> · <strong>Capacidad limitada a 25 kits por ciclo semanal</strong> para preservar la calidad gastronómica · Ciudad del Este</span>
       </div>
       <div class="lang-selector-flags">
-        <a href="../index.html" class="flag-pill" title="Português (Brasil)">
+        <a href="/" class="flag-pill" title="Português (Brasil)">
           <span class="flag-icon">🇧🇷</span>
           <span class="flag-text">Brasil (PT)</span>
         </a>
-        <a href="index.html" class="flag-pill active" title="Español (Paraguay)">
+        <a href="/es" class="flag-pill active" title="Español (Paraguay)">
           <span class="flag-icon">🇵🇾</span>
           <span class="flag-text">Paraguay (ES)</span>
         </a>
@@ -46,7 +60,7 @@
   <nav class="fixed-nav" id="main-nav">
     <div class="container nav-flex">
       <a href="#" class="nav-logo" aria-label="NUTYVA® - Alimentación Saludable">
-        <img src="../assets/logo_nutyva.png" alt="NUTYVA® - Alimentación Saludable" class="nav-logo-img">
+        <img src="../assets/logo_nutyva_320.webp" width="320" height="90" alt="NUTYVA® - Alimentación Saludable" class="nav-logo-img" fetchpriority="high">
       </a>
       <div class="nav-links">
         <a href="#calorias" class="nav-link">Calorías & Porciones</a>
@@ -55,11 +69,11 @@
         <a href="#duvidas" class="nav-link">Preguntas</a>
       </div>
       <div class="nav-flag-switcher">
-        <a href="../index.html" class="flag-chip" title="Versión en Portugués">
+        <a href="/" class="flag-chip" title="Versión en Portugués">
           <span class="chip-flag">🇧🇷</span>
           <span class="chip-code">PT</span>
         </a>
-        <a href="index.html" class="flag-chip active" title="Versión en Español">
+        <a href="/es" class="flag-chip active" title="Versión en Español">
           <span class="chip-flag">🇵🇾</span>
           <span class="chip-code">ES</span>
         </a>
@@ -90,12 +104,11 @@
             <div class="hero-video-card">
               <video 
                 class="hero-video-player"
-                autoplay 
                 muted 
                 loop 
                 playsinline 
                 webkit-playsinline
-                preload="metadata"
+                preload="none"
                 poster="../assets/videos/nutyva_showcase_poster.webp">
                 <source src="../assets/videos/nutyva_showcase_fast.webm" type="video/webm">
                 <source src="../assets/videos/nutyva_showcase_fast.mp4" type="video/mp4">
@@ -312,7 +325,7 @@
       <div class="gourmet-dishes-grid">
         <article class="dish-item-card">
           <div class="dish-media">
-            <img src="../assets/criativos/IMG_4723.PNG" alt="Vianda real de Carne Desmechada con Calabaza Asada" class="dish-img" loading="lazy">
+            <img src="../assets/criativos/IMG_4723.webp" width="720" height="947" alt="Vianda real de Carne Desmechada con Calabaza Asada" class="dish-img" loading="lazy" decoding="async">
           </div>
           <div class="dish-info">
             <span class="dish-kicker">CARNE VACUNA</span>
@@ -326,7 +339,7 @@
 
         <article class="dish-item-card">
           <div class="dish-media">
-            <img src="../assets/criativos/IMG_4728.PNG" alt="Vianda real de Pollo a la Plancha con Arroz y Porotos" class="dish-img" loading="lazy">
+            <img src="../assets/criativos/IMG_4728.webp" width="720" height="900" alt="Vianda real de Pollo a la Plancha con Arroz y Porotos" class="dish-img" loading="lazy" decoding="async">
           </div>
           <div class="dish-info">
             <span class="dish-kicker">COMIDA CASERA</span>
@@ -340,7 +353,7 @@
 
         <article class="dish-item-card">
           <div class="dish-media">
-            <img src="../assets/criativos/IMG_4729.PNG" alt="Vianda real de Strogonoff de Pollo con Arroz" class="dish-img" loading="lazy">
+            <img src="../assets/criativos/IMG_4729.webp" width="720" height="887" alt="Vianda real de Strogonoff de Pollo con Arroz" class="dish-img" loading="lazy" decoding="async">
           </div>
           <div class="dish-info">
             <span class="dish-kicker">CREMOSO Y SABROSO</span>
@@ -354,7 +367,7 @@
 
         <article class="dish-item-card">
           <div class="dish-media">
-            <img src="../assets/criativos/IMG_4726.PNG" alt="Vianda real de Tiras de Lomo con Puré de Calabaza" class="dish-img" loading="lazy">
+            <img src="../assets/criativos/IMG_4726.webp" width="720" height="734" alt="Vianda real de Tiras de Lomo con Puré de Calabaza" class="dish-img" loading="lazy" decoding="async">
           </div>
           <div class="dish-info">
             <span class="dish-kicker">CARNE VACUNA</span>
@@ -368,7 +381,7 @@
 
         <article class="dish-item-card">
           <div class="dish-media">
-            <img src="../assets/criativos/IMG_4724.PNG" alt="Vianda real de Fricasé Cremoso de Pollo" class="dish-img" loading="lazy">
+            <img src="../assets/criativos/IMG_4724.webp" width="720" height="719" alt="Vianda real de Fricasé Cremoso de Pollo" class="dish-img" loading="lazy" decoding="async">
           </div>
           <div class="dish-info">
             <span class="dish-kicker">CREMOSIDAD Y SABOR</span>
@@ -753,7 +766,7 @@
                 <span>🌶️ Sin Picante</span>
               </label>
               <label class="interactive-chip">
-                <input type="checkbox" name="f-diet" value="Más Verduras">
+                <input type="checkbox" name="f-diet-es" value="Más Verduras">
                 <span>🥦 Más Verduras</span>
               </label>
               <label class="interactive-chip">
@@ -786,17 +799,15 @@
   <footer class="site-footer">
     <div class="container footer-flex">
       <div class="footer-brand-side">
-        <img src="../assets/logo_nutyva_light.png" alt="NUTYVA® - Alimentación Saludable" class="footer-logo-img">
+        <img src="../assets/logo_nutyva_light_320.webp" width="320" height="90" alt="NUTYVA® - Alimentación Saludable" class="footer-logo-img" loading="lazy" decoding="async">
         <p>Cocina artesanal en el Edificio Level (frente al Lago de la República) · Ciudad del Este, Paraguay · Producción bajo agendamiento semanal</p>
       </div>
       <div class="footer-links-side">
         <a href="https://wa.me/5551981338580" target="_blank" rel="noopener">WhatsApp</a>
         <span class="footer-sep">·</span>
-        <a href="https://instagram.com" target="_blank" rel="noopener">Instagram</a>
+        <a href="/">🇧🇷 Português</a>
         <span class="footer-sep">·</span>
-        <a href="../index.html">🇧🇷 Português</a>
-        <span class="footer-sep">·</span>
-        <a href="index.html">🇵🇾 Español</a>
+        <a href="/es">🇵🇾 Español</a>
       </div>
     </div>
   </footer>

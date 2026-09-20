@@ -11,6 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initLanguageSelector();
   initStickyNav();
   initVideoTrigger();
+  initShowcaseVideo();
   initRealDishesCarousel();
   initDynamicWhatsAppLinks();
 });
@@ -40,12 +41,35 @@ function initVideoTrigger() {
   });
 }
 
+function initShowcaseVideo() {
+  const video = document.querySelector(".hero-video-player");
+  if (!video) return;
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || navigator.connection?.saveData) {
+    video.controls = true;
+    return;
+  }
+
+  const play = () => video.play().catch(() => { video.controls = true; });
+  if (!window.matchMedia("(max-width: 767px)").matches) {
+    play();
+    return;
+  }
+
+  const startWhenIdle = () => {
+    if ("requestIdleCallback" in window) {
+      window.requestIdleCallback(play, { timeout: 3000 });
+    } else {
+      window.setTimeout(play, 1500);
+    }
+  };
+  if (document.readyState === "complete") startWhenIdle();
+  else window.addEventListener("load", startWhenIdle, { once: true });
+}
+
 // 1. Gerador de Pedido via WhatsApp com Mensagem 100% Personalizada
 function initOrderForm() {
   const form = document.getElementById("order-builder-form");
-  if (!form) return;
-
-  form.addEventListener("submit", (e) => {
+  if (form) form.addEventListener("submit", (e) => {
     e.preventDefault();
 
     const name = document.getElementById("f-name")?.value.trim() || "";
@@ -87,13 +111,23 @@ Gostaria de confirmar se ainda restam vagas no lote artesanal desta semana!`;
 
     const waUrl = `https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(message)}`;
 
+    // Disparo Meta Pixel (Conversão Lead)
+    if (typeof fbq === "function") {
+      fbq("track", "Lead", {
+        content_name: "Montagem de Pedido / Cardápio",
+        content_category: kit,
+        value: kit.includes("10") ? 199.00 : (kit.includes("20") ? 398.00 : 99.50),
+        currency: "BRL"
+      });
+    }
+
     // Feedback visual no botão
     const submitBtn = document.getElementById("btn-submit-form");
     if (submitBtn) {
       const originalHtml = submitBtn.innerHTML;
       submitBtn.innerHTML = "<span>✓ Abrindo WhatsApp...</span>";
       submitBtn.style.backgroundColor = "#25D366";
-      
+
       setTimeout(() => {
         submitBtn.innerHTML = originalHtml;
         submitBtn.style.backgroundColor = "";
@@ -143,6 +177,16 @@ Gostaria de confirmar se ainda restam vagas no lote artesanal desta semana!`;
 ¿Aún quedan cupos disponibles en el lote artesanal de esta semana?`;
 
     const waUrl = `https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(message)}`;
+
+    // Disparo Meta Pixel (Conversão Lead ES)
+    if (typeof fbq === "function") {
+      fbq("track", "Lead", {
+        content_name: "Armado de Viandas ES",
+        content_category: kit,
+        value: kit.includes("10") ? 249000 : (kit.includes("20") ? 498000 : 125000),
+        currency: "PYG"
+      });
+    }
 
     const submitBtn = document.getElementById("btn-submit-form-es");
     if (submitBtn) {
@@ -241,15 +285,31 @@ function initRealDishesCarousel() {
   }
 }
 
-// 5. Links Dinâmicos de WhatsApp
+// 5. Links Dinâmicos de WhatsApp & Rastreamento Global de Cliques
 function initDynamicWhatsAppLinks() {
+  // Pratos do carrossel
   document.querySelectorAll("[data-wa-dish]").forEach(btn => {
     btn.addEventListener("click", (e) => {
       e.preventDefault();
       const dishName = btn.getAttribute("data-wa-dish") || "este prato do cardápio semanal";
       const message = `Olá! Vi o prato *"${dishName}"* no carrossel do site e gostaria de saber se ele está no lote desta semana para incluir no meu kit!`;
+
+      if (typeof fbq === "function") {
+        fbq("track", "Contact", { content_name: `Prato: ${dishName}` });
+      }
+
       const waUrl = `https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(message)}`;
       window.open(waUrl, "_blank");
+    });
+  });
+
+  // Rastreamento de todos os demais botões/links direcionando para o WhatsApp
+  document.querySelectorAll('a[href*="wa.me"]').forEach(link => {
+    link.addEventListener("click", () => {
+      if (typeof fbq === "function") {
+        const text = link.innerText.trim() || link.getAttribute("aria-label") || "Link WhatsApp";
+        fbq("track", "Contact", { content_name: text });
+      }
     });
   });
 }
