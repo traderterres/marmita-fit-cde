@@ -3,19 +3,38 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Viandas congeladas en Ciudad del Este | NUTYVA® Alimentación Saludable</title>
-  <meta name="description" content="Viandas congeladas artesanales en Ciudad del Este. 35g a 40g de proteína noble, carnes seleccionadas y cero agua en el plato. A partir de 24.900 Gs (~R$ 19,90).">
   
-  <!-- Favicons Oficiales NUTYVA® -->
-  <link rel="icon" type="image/png" href="favicon-96x96.png" sizes="96x96">
-  <link rel="shortcut icon" href="favicon.ico">
-  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-  <meta name="apple-mobile-web-app-title" content="Nutyva">
-  <link rel="manifest" href="site.webmanifest">
-  
-  <link rel="stylesheet" href="../style.css?v=showcase-video-v1">
+  <!-- Preconnect e DNS-Prefetch para disparo ultra rápido do Meta Pixel -->
+  <link rel="preconnect" href="https://connect.facebook.net" crossorigin>
+  <link rel="preconnect" href="https://www.facebook.com" crossorigin>
+  <link rel="dns-prefetch" href="https://connect.facebook.net">
+  <link rel="dns-prefetch" href="https://www.facebook.com">
 
-  <!-- Meta Pixel Code Oficial - Pixel Marmita Fit -->
+  <!-- Respeito a Escolha Manual de Idioma -->
+  <script>
+    (function() {
+      try {
+        var manualLang = localStorage.getItem('nutyva_user_lang');
+        var params = new URLSearchParams(window.location.search);
+        var forceLang = params.get('lang');
+        if (forceLang === 'es') {
+          localStorage.setItem('nutyva_user_lang', 'es');
+          return;
+        }
+        if (forceLang === 'pt') {
+          localStorage.setItem('nutyva_user_lang', 'pt');
+          window.location.replace('/' + window.location.search + window.location.hash);
+          return;
+        }
+        if (manualLang === 'pt') {
+          window.location.replace('/' + window.location.search + window.location.hash);
+          return;
+        }
+      } catch (e) {}
+    })();
+  </script>
+
+  <!-- Meta Pixel Code Oficial - Disparo Imediato sem Delays (ID: 2242030616369158) -->
   <script>
   !function(f,b,e,v,n,t,s)
   {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -32,6 +51,19 @@
   src="https://www.facebook.com/tr?id=2242030616369158&ev=PageView&noscript=1"
   /></noscript>
   <!-- End Meta Pixel Code -->
+
+  <title>Viandas congeladas en Ciudad del Este | NUTYVA® Alimentación Saludable</title>
+  <meta name="description" content="Viandas congeladas artesanales en Ciudad del Este. 35g a 40g de proteína noble, carnes seleccionadas y cero agua en el plato. A partir de 24.900 Gs (~R$ 19,90).">
+  
+  <!-- Favicons Oficiales NUTYVA® -->
+  <link rel="icon" type="image/png" href="favicon-96x96.png" sizes="96x96">
+  <link rel="shortcut icon" href="favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-title" content="Nutyva">
+  <link rel="manifest" href="site.webmanifest">
+  
+  <link rel="preload" href="../style.css?v=showcase-video-v1" as="style">
+  <link rel="stylesheet" href="../style.css?v=showcase-video-v1">
 </head>
 
 <body>
@@ -42,16 +74,6 @@
       <div class="top-text">
         <span class="live-dot"></span>
         <span>🌿 Cocina Artesanal en el <strong>Edificio Level</strong> · <strong>Capacidad limitada a 25 kits por ciclo semanal</strong> para preservar la calidad gastronómica · Ciudad del Este</span>
-      </div>
-      <div class="lang-selector-flags">
-        <a href="/" class="flag-pill" title="Português (Brasil)">
-          <span class="flag-icon">🇧🇷</span>
-          <span class="flag-text">Brasil (PT)</span>
-        </a>
-        <a href="/es" class="flag-pill active" title="Español (Paraguay)">
-          <span class="flag-icon">🇵🇾</span>
-          <span class="flag-text">Paraguay (ES)</span>
-        </a>
       </div>
     </div>
   </header>
@@ -104,11 +126,12 @@
             <div class="hero-video-card">
               <video 
                 class="hero-video-player"
+                autoplay
                 muted 
                 loop 
                 playsinline 
                 webkit-playsinline
-                preload="none"
+                preload="auto"
                 poster="../assets/videos/nutyva_showcase_poster.webp">
                 <source src="../assets/videos/nutyva_showcase_fast.webm" type="video/webm">
                 <source src="../assets/videos/nutyva_showcase_fast.mp4" type="video/mp4">
@@ -494,49 +517,55 @@
       </div>
 
       <div class="pricing-cards-grid">
+        <!-- KIT 5 -->
         <div class="pricing-box">
-          <div class="box-badge">SEMANAL</div>
+          <div class="box-badge">EXPERIMENTAR</div>
           <h3 class="box-title">KIT 5 VIANDAS</h3>
-          <p class="box-desc">Almuerzo de lunes a viernes para tu semana con practicidad y sabor</p>
+          <p class="box-desc">Almuerzo de lunes a viernes para 1 persona (5 comidas prácticas)</p>
           <div class="box-price-tag">
             <span class="box-curr">Gs</span>
-            <span class="box-val">125.000</span>
-            <span class="box-pyg">~R$ 99,50 (24.900 Gs / comida)</span>
+            <span class="box-val">169.000</span>
+            <span class="box-pyg">~ R$ 135</span>
+            <span class="box-per-unit">33.800 Gs por comida (R$ 27,00)</span>
           </div>
-          <div class="box-saving">Ahorro de ~100.000 Gs vs delivery</div>
-          <a href="https://wa.me/5551981338580?text=Hola!%20Quiero%20agendar%20el%20*Kit%205%20Viandas*%20(125.000%20Gs%20%2F%20~R%24%2099%2C50)%20de%20la%20semana." target="_blank" rel="noopener" class="btn btn-terracota btn-full">
-            Asegurar Cupo en Kit 5 📲
+          <div class="box-saving">Ahorro vs delivery diario</div>
+          <a href="https://wa.me/5551981338580?text=%C2%A1Hola!%20Quisiera%20consultar%20si%20tienen%20cupos%20disponibles%20para%20el%20*Kit%205%20Viandas*%20(169.000%20Gs%20%2F%20~R%24%20135)%20esta%20semana." target="_blank" rel="noopener" class="btn btn-terracota btn-full">
+            Ver si hay cupos en el Kit 5 📲
           </a>
         </div>
 
+        <!-- KIT 10 (DESTACADO) -->
         <div class="pricing-box featured-pricing-box">
-          <div class="featured-top-ribbon">👑 EL MÁS ELEGIDO · RESUELVE TU SEMANA</div>
+          <div class="featured-top-ribbon">👑 EL MÁS ELEGIDO · SEMANA COMPLETA</div>
           <div class="box-badge gold">SEMANA COMPLETA</div>
           <h3 class="box-title">KIT 10 VIANDAS</h3>
-          <p class="box-desc">Almuerzo y cena garantizados de lunes a viernes para vos y tu familia</p>
+          <p class="box-desc">Almuerzo y cena de lunes a viernes para 1 persona (10 comidas)</p>
           <div class="box-price-tag">
             <span class="box-curr">Gs</span>
-            <span class="box-val">249.000</span>
-            <span class="box-pyg">~R$ 199 (24.900 Gs / comida)</span>
+            <span class="box-val">299.000</span>
+            <span class="box-pyg">~ R$ 239</span>
+            <span class="box-per-unit">29.900 Gs por comida (R$ 23,90)</span>
           </div>
-          <div class="box-saving gold-saving">Ahorro de ~200.000 Gs vs delivery</div>
-          <a href="https://wa.me/5551981338580?text=Hola!%20Quiero%20asegurar%20el%20*Kit%2010%20Viandas*%20(249.000%20Gs%20%2F%20~R%24%20199)%20para%20almuerzo%20y%20cena." target="_blank" rel="noopener" class="btn btn-terracota btn-full btn-large btn-sheen">
-            Asegurar Cupo en Kit 10 📲
+          <div class="box-saving gold-saving">Ahorro de 3.900 Gs por vianda vs Kit 5</div>
+          <a href="https://wa.me/5551981338580?text=%C2%A1Hola!%20Quisiera%20consultar%20si%20tienen%20cupos%20disponibles%20para%20el%20*Kit%2010%20Viandas*%20(299.000%20Gs%20%2F%20~R%24%20239)%20con%20almuerzo%20y%20cena%20esta%20semana." target="_blank" rel="noopener" class="btn btn-terracota btn-full btn-large btn-sheen">
+            Ver si hay cupos en el Kit 10 📲
           </a>
         </div>
 
+        <!-- KIT 20 -->
         <div class="pricing-box">
-          <div class="box-badge">PAREJA O QUINCENA</div>
+          <div class="box-badge">VOLUMEN ECONÓMICO</div>
           <h3 class="box-title">KIT 20 VIANDAS</h3>
-          <p class="box-desc">Dos semanas resueltas para vos, o el mes completo de la pareja</p>
+          <p class="box-desc">2 semanas de almuerzo y cena para 1 persona (o 2 semanas de almuerzo para 2 personas)</p>
           <div class="box-price-tag">
             <span class="box-curr">Gs</span>
             <span class="box-val">498.000</span>
-            <span class="box-pyg">~R$ 398 (24.900 Gs / comida)</span>
+            <span class="box-pyg">~ R$ 398</span>
+            <span class="box-per-unit">24.900 Gs por comida (R$ 19,90)</span>
           </div>
-          <div class="box-saving">Ahorro de ~400.000 Gs vs delivery</div>
-          <a href="https://wa.me/5551981338580?text=Hola!%20Quiero%20agendar%20el%20*Kit%2020%20Viandas*%20(498.000%20Gs%20%2F%20~R%24%20398)%20a%2024.900%20Gs%20por%20comida." target="_blank" rel="noopener" class="btn btn-terracota btn-full">
-            Asegurar Cupo en Kit 20 📲
+          <div class="box-saving">Mejor precio: solo 24.900 Gs por comida (~R$ 19,90)</div>
+          <a href="https://wa.me/5551981338580?text=%C2%A1Hola!%20Quisiera%20consultar%20si%20tienen%20cupos%20disponibles%20para%20el%20*Kit%2020%20Viandas*%20(498.000%20Gs%20%2F%20~R%24%20398)%20a%2024.900%20Gs%20por%20comida%20esta%20semana." target="_blank" rel="noopener" class="btn btn-terracota btn-full">
+            Ver si hay cupos en el Kit 20 📲
           </a>
         </div>
       </div>
@@ -635,162 +664,6 @@
             </p>
           </div>
         </details>
-      </div>
-    </div>
-  </section>
-
-  <!-- SECCIÓN 10: FORMULARIO -->
-  <!-- SECCIÓN 10: ARMÁ TU PROPIA DIETA & KIT (FORMULARIO INTERACTIVO) -->
-  <section class="section form-section" id="formulario">
-    <div class="container">
-      <div class="form-cockpit-box">
-        <div class="form-cockpit-header text-center">
-          <span class="eyebrow">🥗 PERSONALIZACIÓN & DIETA A MEDIDA</span>
-          <h2 class="section-title">Armá tu propia dieta y tu kit</h2>
-          <p class="section-subtitle">
-            Elegí tu objetivo, tus proteínas y bases preferidas o ingresá las pautas de tu nutricionista. Cocinamos todo a tu medida en CDE:
-          </p>
-        </div>
-
-        <form id="order-builder-form-es" class="builder-interactive-form">
-          <div class="form-double-cols">
-            <div class="form-cell">
-              <label for="f-name-es">1. Tu Nombre Completo</label>
-              <input type="text" id="f-name-es" required placeholder="Ej: Roberto Silva">
-            </div>
-
-            <div class="form-cell">
-              <label for="f-bairro-es">2. Barrio / Zona en CDE</label>
-              <select id="f-bairro-es" required>
-                <option value="">Seleccioná tu zona...</option>
-                <option value="Paraná Country Club">Paraná Country Club</option>
-                <option value="Hernandarias">Hernandarias</option>
-                <option value="Área 1">Área 1</option>
-                <option value="Área 2">Área 2</option>
-                <option value="Área 3">Área 3</option>
-                <option value="Área 4">Área 4</option>
-                <option value="Boquerón">Boquerón</option>
-                <option value="Otro barrio en CDE">Otro barrio en CDE</option>
-              </select>
-            </div>
-
-            <div class="form-cell full-width">
-              <label for="f-kit-es">3. Cantidad de Viandas Semanales</label>
-              <select id="f-kit-es" required>
-                <option value="Kit 10 Viandas (249.000 Gs / ~R$ 199)">Kit 10 Viandas (249.000 Gs / ~R$ 199) — 👑 Semana Completa (Almuerzo + Cena)</option>
-                <option value="Kit 5 Viandas (125.000 Gs / ~R$ 99,50)">Kit 5 Viandas (125.000 Gs / ~R$ 99,50) — Almuerzo Lun-Vie (5 Comidas)</option>
-                <option value="Kit 20 Viandas (498.000 Gs / ~R$ 398)">Kit 20 Viandas (498.000 Gs / ~R$ 398) — Pareja o Quincena</option>
-              </select>
-            </div>
-          </div>
-
-          <!-- PASO 4: OBJETIVO DE LA DIETA -->
-          <div class="form-cell full-width form-step-group">
-            <label class="step-group-title">4. ¿Cuál es tu objetivo con la dieta?</label>
-            <div class="diet-options-grid">
-              <label class="diet-option-pill">
-                <input type="radio" name="f-objetivo-es" value="Déficit Calórico / Descenso de Peso" checked>
-                <span>📉 Déficit Calórico / Descenso</span>
-              </label>
-              <label class="diet-option-pill">
-                <input type="radio" name="f-objetivo-es" value="Hipertrofia / Ganancia Muscular">
-                <span>💪 Hipertrofia / Ganancia Muscular</span>
-              </label>
-              <label class="diet-option-pill">
-                <input type="radio" name="f-objetivo-es" value="Mantenimiento & Comer Saludable">
-                <span>⚖️ Mantenimiento & Vida Saludable</span>
-              </label>
-              <label class="diet-option-pill">
-                <input type="radio" name="f-objetivo-es" value="Plan de Mi Nutricionista">
-                <span>👩‍⚕️ Plan de Mi Nutricionista</span>
-              </label>
-            </div>
-          </div>
-
-          <!-- PASO 5: PREFERENCIA DE PROTEÍNAS -->
-          <div class="form-cell full-width form-step-group">
-            <label class="step-group-title">5. Preferencia de Proteínas en tus Viandas:</label>
-            <div class="diet-options-grid">
-              <label class="diet-option-pill">
-                <input type="radio" name="f-proteina-es" value="Variado (Carne vacuna + Pollo + Pescado)" checked>
-                <span>🥩 Variado (Carne vacuna, pollo y pescado)</span>
-              </label>
-              <label class="diet-option-pill">
-                <input type="radio" name="f-proteina-es" value="Sin Pescado (Solo carne vacuna y pollo)">
-                <span>🍗 Sin Pescado (Carne vacuna y pollo)</span>
-              </label>
-              <label class="diet-option-pill">
-                <input type="radio" name="f-proteina-es" value="Sin Carne Roja (Solo pollo, pescado y huevos)">
-                <span>🐟 Sin Carne Roja (Pollo y pescado)</span>
-              </label>
-            </div>
-          </div>
-
-          <!-- PASO 6: BASE Y CARBOHIDRATOS -->
-          <div class="form-cell full-width form-step-group">
-            <label class="step-group-title">6. Preferencia de Base & Carbohidratos:</label>
-            <div class="diet-options-grid">
-              <label class="diet-option-pill">
-                <input type="radio" name="f-carbo-es" value="Tradicional (Arroz, porotos/frijoles, purés y mandioca)" checked>
-                <span>🍚 Tradicional (Arroz, porotos, purés y mandioca)</span>
-              </label>
-              <label class="diet-option-pill">
-                <input type="radio" name="f-carbo-es" value="Low Carb (Calabaza asada y vegetales salteados)">
-                <span>🥑 Low Carb (Calabaza y verduras al vapor)</span>
-              </label>
-              <label class="diet-option-pill">
-                <input type="radio" name="f-carbo-es" value="Equilibrado Mitad y Mitad">
-                <span>🥗 Mitad y Mitad (Mitad Low Carb, mitad Tradicional)</span>
-              </label>
-            </div>
-          </div>
-
-          <!-- PASO 7: RESTRICCIONES ALIMENTARIAS -->
-          <div class="form-cell full-width form-step-group">
-            <label class="step-group-title">7. Restricciones o Cuidados Especiales (Marcá si tenés):</label>
-            <div class="chips-flex-wrap">
-              <label class="interactive-chip">
-                <input type="checkbox" name="f-diet-es" value="Sin Lactosa">
-                <span>🥛 Sin Lactosa</span>
-              </label>
-              <label class="interactive-chip">
-                <input type="checkbox" name="f-diet-es" value="Sin Gluten">
-                <span>🌾 Sin Gluten</span>
-              </label>
-              <label class="interactive-chip">
-                <input type="checkbox" name="f-diet-es" value="Sin Cebolla / Ajo">
-                <span>🧅 Sin Cebolla</span>
-              </label>
-              <label class="interactive-chip">
-                <input type="checkbox" name="f-diet-es" value="Sin Picante">
-                <span>🌶️ Sin Picante</span>
-              </label>
-              <label class="interactive-chip">
-                <input type="checkbox" name="f-diet-es" value="Más Verduras">
-                <span>🥦 Más Verduras</span>
-              </label>
-              <label class="interactive-chip">
-                <input type="checkbox" name="f-diet-es" value="Porciones Rigurosas de la Nutri">
-                <span>📋 Porciones Rigurosas</span>
-              </label>
-            </div>
-          </div>
-
-          <!-- PASO 8: OBSERVACIONES Y GRAMAJES -->
-          <div class="form-cell full-width">
-            <label for="f-obs-es">8. Porciones de tu dieta o ingredientes que preferís evitar (Opcional):</label>
-            <textarea id="f-obs-es" rows="3" placeholder="Ej: Mi nutri indicó 140g de pollo y 80g de batata; o no me gusta el brócoli y prefiero puré de calabaza..."></textarea>
-          </div>
-
-          <div class="form-submit-row">
-            <button type="submit" id="btn-submit-form-es" class="btn btn-terracota btn-large btn-full btn-sheen">
-              <span>Armar Mi Dieta y Enviar por WhatsApp 📲</span>
-            </button>
-            <p class="form-submit-note">
-              🔒 Tus elecciones se abren directamente en la conversación de WhatsApp para coordinar el lote de la semana sin compromiso.
-            </p>
-          </div>
-        </form>
       </div>
     </div>
   </section>

@@ -3,20 +3,52 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Marmitas congeladas em Ciudad del Este | NUTYVA® Alimentação Saudável</title>
-  <meta name="description" content="Marmitas congeladas artesanais em Ciudad del Este. 35g a 40g de proteína nobre, carnes selecionadas e zero água no prato. A partir de R$ 19,90 (~24.900 Gs).">
   
-  <!-- Favicons Oficiais NUTYVA® -->
-  <link rel="icon" type="image/png" href="favicon-96x96.png" sizes="96x96">
-  <link rel="shortcut icon" href="favicon.ico">
-  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-  <meta name="apple-mobile-web-app-title" content="Nutyva">
-  <link rel="manifest" href="site.webmanifest">
-  
-  <!-- Estilos Gerais com Cache Buster Otimizado -->
-  <link rel="stylesheet" href="style.css?v=showcase-video-v1">
+  <!-- Preconnect e DNS-Prefetch para disparo ultra rápido do Meta Pixel -->
+  <link rel="preconnect" href="https://connect.facebook.net" crossorigin>
+  <link rel="preconnect" href="https://www.facebook.com" crossorigin>
+  <link rel="dns-prefetch" href="https://connect.facebook.net">
+  <link rel="dns-prefetch" href="https://www.facebook.com">
 
-  <!-- Meta Pixel Code Oficial - Pixel Marmita Fit -->
+  <!-- Detecção Automática Inteligente de Idioma (Celular/Navegador) -->
+  <script>
+    (function() {
+      try {
+        var manualLang = localStorage.getItem('nutyva_user_lang');
+        var params = new URLSearchParams(window.location.search);
+        var forceLang = params.get('lang');
+        if (forceLang === 'pt') {
+          localStorage.setItem('nutyva_user_lang', 'pt');
+          return;
+        }
+        if (forceLang === 'es') {
+          localStorage.setItem('nutyva_user_lang', 'es');
+          window.location.replace('/es' + window.location.search + window.location.hash);
+          return;
+        }
+        if (manualLang === 'pt') return;
+        if (manualLang === 'es') {
+          window.location.replace('/es' + window.location.search + window.location.hash);
+          return;
+        }
+        var navLang = (navigator.language || navigator.userLanguage || '').toLowerCase();
+        var navLangs = navigator.languages || [];
+        var isSpanish = navLang.indexOf('es') === 0;
+        if (!isSpanish && navLangs.length > 0) {
+          for (var i = 0; i < navLangs.length; i++) {
+            var l = navLangs[i].toLowerCase();
+            if (l.indexOf('es') === 0) { isSpanish = true; break; }
+            if (l.indexOf('pt') === 0) { break; }
+          }
+        }
+        if (isSpanish) {
+          window.location.replace('/es' + window.location.search + window.location.hash);
+        }
+      } catch (e) {}
+    })();
+  </script>
+
+  <!-- Meta Pixel Code Oficial - Disparo Imediato sem Delays (ID: 2242030616369158) -->
   <script>
   !function(f,b,e,v,n,t,s)
   {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -33,6 +65,20 @@
   src="https://www.facebook.com/tr?id=2242030616369158&ev=PageView&noscript=1"
   /></noscript>
   <!-- End Meta Pixel Code -->
+
+  <title>Marmitas congeladas em Ciudad del Este | NUTYVA® Alimentação Saudável</title>
+  <meta name="description" content="Marmitas congeladas artesanais em Ciudad del Este. 35g a 40g de proteína nobre, carnes selecionadas e zero água no prato. A partir de R$ 19,90 (~24.900 Gs).">
+  
+  <!-- Favicons Oficiais NUTYVA® -->
+  <link rel="icon" type="image/png" href="favicon-96x96.png" sizes="96x96">
+  <link rel="shortcut icon" href="favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-title" content="Nutyva">
+  <link rel="manifest" href="site.webmanifest">
+  
+  <!-- Estilos Gerais com Preload de Alta Prioridade -->
+  <link rel="preload" href="style.css?v=showcase-video-v1" as="style">
+  <link rel="stylesheet" href="style.css?v=showcase-video-v1">
 </head>
 
 <body>
@@ -43,16 +89,6 @@
       <div class="top-text">
         <span class="live-dot"></span>
         <span>🌿 Cozinha Artesanal no <strong>Edifício Level</strong> · <strong>Capacidade limitada a 25 kits por ciclo semanal</strong> para manter o padrão gastronômico · Ciudad del Este</span>
-      </div>
-      <div class="lang-selector-flags">
-        <a href="/" class="flag-pill active" title="Português (Brasil)">
-          <span class="flag-icon">🇧🇷</span>
-          <span class="flag-text">Brasil (PT)</span>
-        </a>
-        <a href="/es" class="flag-pill" title="Español (Paraguay)">
-          <span class="flag-icon">🇵🇾</span>
-          <span class="flag-text">Paraguay (ES)</span>
-        </a>
       </div>
     </div>
   </header>
@@ -106,11 +142,12 @@
             <div class="hero-video-card">
               <video 
                 class="hero-video-player"
+                autoplay
                 muted 
                 loop 
                 playsinline 
                 webkit-playsinline
-                preload="none"
+                preload="auto"
                 poster="assets/videos/nutyva_showcase_poster.webp">
                 <source src="assets/videos/nutyva_showcase_fast.webm" type="video/webm">
                 <source src="assets/videos/nutyva_showcase_fast.mp4" type="video/mp4">
@@ -529,54 +566,54 @@
         <div class="pricing-box">
           <div class="box-badge">EXPERIMENTAR</div>
           <h3 class="box-title">KIT 5 POTES</h3>
-          <p class="box-desc">Almoço de segunda a sexta para sua semana com praticidade e sabor</p>
+          <p class="box-desc">Almoço de segunda a sexta para 1 pessoa (5 refeições práticas)</p>
           <div class="box-price-tag">
             <span class="box-curr">R$</span>
-            <span class="box-val">99<small>,50</small></span>
-            <span class="box-pyg">~ 125.000 Gs</span>
-            <span class="box-per-unit">R$ 19,90 por refeição</span>
+            <span class="box-val">135</span>
+            <span class="box-pyg">~ 169.000 Gs</span>
+            <span class="box-per-unit">R$ 27,00 por refeição</span>
           </div>
-          <div class="box-saving">Economia de ~R$ 75 vs delivery</div>
-          <!-- WhatsApp somente após a pessoa escolher o kit -->
-          <a href="https://wa.me/5551981338580?text=Ol%C3%A1!%20Quero%20agendar%20o%20*Kit%205%20Potes*%20(R%24%2099%2C50%20%2F%20~125.000%20Gs)%20a%20R%24%2019%2C90%20por%20refei%C3%A7%C3%A3o." target="_blank" rel="noopener" class="btn btn-terracota btn-full">
-            Garantir Vaga no Kit 5 📲
+          <div class="box-saving">Economia vs delivery diário</div>
+          <!-- WhatsApp para consultar vaga no Kit 5 -->
+          <a href="https://wa.me/5551981338580?text=Ol%C3%A1!%20Gostaria%20de%20saber%20se%20ainda%20tem%20vaga%20para%20o%20*Kit%205%20Potes*%20(R%24%20135%20%2F%20~169.000%20Gs)%20nesta%20semana." target="_blank" rel="noopener" class="btn btn-terracota btn-full">
+            Ver se tem vaga no Kit 5 📲
           </a>
         </div>
 
         <!-- KIT 10 (DESTACADO) -->
         <div class="pricing-box featured-pricing-box">
-          <div class="featured-top-ribbon">👑 O MAIS PEDIDO · RESOLVE SUA SEMANA</div>
+          <div class="featured-top-ribbon">👑 O MAIS PEDIDO · SEMANA COMPLETA</div>
           <div class="box-badge gold">SEMANA COMPLETA</div>
           <h3 class="box-title">KIT 10 POTES</h3>
-          <p class="box-desc">Almoço e jantar garantidos de segunda a sexta para você e sua família</p>
+          <p class="box-desc">Almoço e jantar de segunda a sexta para 1 pessoa (10 refeições)</p>
           <div class="box-price-tag">
             <span class="box-curr">R$</span>
-            <span class="box-val">199</span>
-            <span class="box-pyg">~ 249.000 Gs</span>
-            <span class="box-per-unit">R$ 19,90 por refeição</span>
+            <span class="box-val">239</span>
+            <span class="box-pyg">~ 299.000 Gs</span>
+            <span class="box-per-unit">R$ 23,90 por refeição</span>
           </div>
-          <div class="box-saving gold-saving">Economia de ~R$ 150 vs delivery</div>
-          <!-- WhatsApp somente após a pessoa escolher o kit -->
-          <a href="https://wa.me/5551981338580?text=Ol%C3%A1!%20Quero%20garantir%20o%20*Kit%2010%20Potes*%20(R%24%20199%20%2F%20~249.000%20Gs)%20com%20almo%C3%A7o%20e%20jantar%20da%20semana." target="_blank" rel="noopener" class="btn btn-terracota btn-full btn-large btn-sheen">
-            Garantir Vaga no Kit 10 📲
+          <div class="box-saving gold-saving">Economia de R$ 3,10 por pote vs Kit 5</div>
+          <!-- WhatsApp para consultar vaga no Kit 10 -->
+          <a href="https://wa.me/5551981338580?text=Ol%C3%A1!%20Gostaria%20de%20saber%20se%20ainda%20tem%20vaga%20para%20o%20*Kit%2010%20Potes*%20(R%24%20239%20%2F%20~299.000%20Gs)%20com%20almo%C3%A7o%20e%20jantar%20nesta%20semana." target="_blank" rel="noopener" class="btn btn-terracota btn-full btn-large btn-sheen">
+            Ver se tem vaga no Kit 10 📲
           </a>
         </div>
 
         <!-- KIT 20 -->
         <div class="pricing-box">
-          <div class="box-badge">CASAL OU QUINZENA</div>
+          <div class="box-badge">VOLUME ECONÔMICO</div>
           <h3 class="box-title">KIT 20 POTES</h3>
-          <p class="box-desc">Duas semanas tranquilas para você, ou o mês do casal resolvido</p>
+          <p class="box-desc">2 semanas de almoço e jantar para 1 pessoa (ou 2 semanas de almoço para 2 pessoas)</p>
           <div class="box-price-tag">
             <span class="box-curr">R$</span>
             <span class="box-val">398</span>
             <span class="box-pyg">~ 498.000 Gs</span>
             <span class="box-per-unit">R$ 19,90 por refeição</span>
           </div>
-          <div class="box-saving">Economia de ~R$ 300 vs delivery</div>
-          <!-- WhatsApp somente após a pessoa escolher o kit -->
-          <a href="https://wa.me/5551981338580?text=Ol%C3%A1!%20Quero%20agendar%20o%20*Kit%2020%20Potes*%20(R%24%20398%20%2F%20~498.000%20Gs)%20por%20R%24%2019%2C90%20por%20refei%C3%A7%C3%A3o." target="_blank" rel="noopener" class="btn btn-terracota btn-full">
-            Garantir Vaga no Kit 20 📲
+          <div class="box-saving">Melhor preço: apenas R$ 19,90 por refeição</div>
+          <!-- WhatsApp para consultar vaga no Kit 20 -->
+          <a href="https://wa.me/5551981338580?text=Ol%C3%A1!%20Gostaria%20de%20saber%20se%20ainda%20tem%20vaga%20para%20o%20*Kit%2020%20Potes*%20(R%24%20398%20%2F%20~498.000%20Gs)%20a%20R%24%2019%2C90%20por%20refei%C3%A7%C3%A3o%20nesta%20semana." target="_blank" rel="noopener" class="btn btn-terracota btn-full">
+            Ver se tem vaga no Kit 20 📲
           </a>
         </div>
       </div>
@@ -679,160 +716,6 @@
     </div>
   </section>
 
-  <!-- SEÇÃO 10: MONTE SUA PRÓPRIA DIETA & KIT (FORMULÁRIO INTERATIVO) -->
-  <section class="section form-section" id="formulario">
-    <div class="container">
-      <div class="form-cockpit-box">
-        <div class="form-cockpit-header text-center">
-          <span class="eyebrow">🥗 PERSONALIZAÇÃO & DIETA SOB MEDIDA</span>
-          <h2 class="section-title">Monte a sua própria dieta e seu kit</h2>
-          <p class="section-subtitle">
-            Defina seu objetivo, suas preferências de proteínas e carbo ou envie a dieta da sua nutricionista. Nós preparamos tudo sob medida em CDE:
-          </p>
-        </div>
-
-        <form id="order-builder-form" class="builder-interactive-form">
-          <div class="form-double-cols">
-            <div class="form-cell">
-              <label for="f-name">1. Seu Nome Completo</label>
-              <input type="text" id="f-name" required placeholder="Ex: Roberto Silva">
-            </div>
-
-            <div class="form-cell">
-              <label for="f-bairro">2. Bairro / Região em CDE</label>
-              <select id="f-bairro" required>
-                <option value="">Selecione sua região...</option>
-                <option value="Paraná Country Club">Paraná Country Club</option>
-                <option value="Hernandarias">Hernandarias</option>
-                <option value="Área 1">Área 1</option>
-                <option value="Área 2">Área 2</option>
-                <option value="Área 3">Área 3</option>
-                <option value="Área 4">Área 4</option>
-                <option value="Boquerón">Boquerón</option>
-                <option value="Outro bairro em CDE">Outro bairro em CDE</option>
-              </select>
-            </div>
-
-            <div class="form-cell full-width">
-              <label for="f-kit">3. Quantidade de Marmitas da Semana</label>
-              <select id="f-kit" required>
-                <option value="Kit 10 Potes (R$ 199 / ~249.000 Gs) - Almoço + Jantar">Kit 10 Potes (R$ 199 / ~249.000 Gs) — 👑 Semana Completa (Almoço + Jantar)</option>
-                <option value="Kit 5 Potes (R$ 99,50 / ~125.000 Gs) - Almoço Seg-Sex">Kit 5 Potes (R$ 99,50 / ~125.000 Gs) — Almoço Seg-Sex (5 Refeições)</option>
-                <option value="Kit 20 Potes (R$ 398 / ~498.000 Gs) - Casal ou Quinzena">Kit 20 Potes (R$ 398 / ~498.000 Gs) — Casal ou Quinzena</option>
-              </select>
-            </div>
-          </div>
-
-          <!-- PASSO 4: OBJETIVO DA DIETA -->
-          <div class="form-cell full-width form-step-group">
-            <label class="step-group-title">4. Qual é o seu objetivo com a dieta?</label>
-            <div class="diet-options-grid">
-              <label class="diet-option-pill">
-                <input type="radio" name="f-objetivo" value="Emagrecimento / Déficit Calórico" checked>
-                <span>📉 Emagrecimento / Déficit Calórico</span>
-              </label>
-              <label class="diet-option-pill">
-                <input type="radio" name="f-objetivo" value="Hipertrofia / Ganho de Massa">
-                <span>💪 Hipertrofia / Ganho de Massa</span>
-              </label>
-              <label class="diet-option-pill">
-                <input type="radio" name="f-objetivo" value="Manutenção & Vida Prática">
-                <span>⚖️ Manutenção & Comer Bem</span>
-              </label>
-              <label class="diet-option-pill">
-                <input type="radio" name="f-objetivo" value="Plano da Minha Nutricionista">
-                <span>👩‍⚕️ Plano da Minha Nutricionista</span>
-              </label>
-            </div>
-          </div>
-
-          <!-- PASSO 5: PREFERÊNCIA DE PROTEÍNAS -->
-          <div class="form-cell full-width form-step-group">
-            <label class="step-group-title">5. Preferência de Proteínas nos Potes:</label>
-            <div class="diet-options-grid">
-              <label class="diet-option-pill">
-                <input type="radio" name="f-proteina" value="Variado (Carne bovina + Frango + Peixe)" checked>
-                <span>🥩 Variado (Carne nobre, frango e peixe)</span>
-              </label>
-              <label class="diet-option-pill">
-                <input type="radio" name="f-proteina" value="Sem Peixe (Apenas carne bovina e frango)">
-                <span>🍗 Sem Peixe (Carne bovina e frango)</span>
-              </label>
-              <label class="diet-option-pill">
-                <input type="radio" name="f-proteina" value="Sem Carne Vermelha (Apenas frango, peixe e ovos)">
-                <span>🐟 Sem Carne Vermelha (Frango e peixe)</span>
-              </label>
-            </div>
-          </div>
-
-          <!-- PASSO 6: BASE E CARBOIDRATOS -->
-          <div class="form-cell full-width form-step-group">
-            <label class="step-group-title">6. Preferência de Base & Carboidratos:</label>
-            <div class="diet-options-grid">
-              <label class="diet-option-pill">
-                <input type="radio" name="f-carbo" value="Tradicional (Arroz, feijão caseiro, purês nobres e mandioca)" checked>
-                <span>🍚 Tradicional (Arroz, feijão, purês e mandioca)</span>
-              </label>
-              <label class="diet-option-pill">
-                <input type="radio" name="f-carbo" value="Low Carb (Abóbora assada, legumes salteados e purês vegetais)">
-                <span>🥑 Low Carb (Abóbora e legumes no vapor)</span>
-              </label>
-              <label class="diet-option-pill">
-                <input type="radio" name="f-carbo" value="Equilibrado Meio a Meio">
-                <span>🥗 Meio a Meio (Metade Low Carb, metade Tradicional)</span>
-              </label>
-            </div>
-          </div>
-
-          <!-- PASSO 7: RESTRIÇÕES ALIMENTARES -->
-          <div class="form-cell full-width form-step-group">
-            <label class="step-group-title">7. Restrições ou Cuidados Especiais (Marque se tiver):</label>
-            <div class="chips-flex-wrap">
-              <label class="interactive-chip">
-                <input type="checkbox" name="f-diet" value="Sem Lactose">
-                <span>🥛 Sem Lactose</span>
-              </label>
-              <label class="interactive-chip">
-                <input type="checkbox" name="f-diet" value="Sem Glúten">
-                <span>🌾 Sem Glúten</span>
-              </label>
-              <label class="interactive-chip">
-                <input type="checkbox" name="f-diet" value="Sem Cebola / Alho">
-                <span>🧅 Sem Cebola</span>
-              </label>
-              <label class="interactive-chip">
-                <input type="checkbox" name="f-diet" value="Sem Pimenta">
-                <span>🌶️ Sem Pimenta</span>
-              </label>
-              <label class="interactive-chip">
-                <input type="checkbox" name="f-diet" value="Mais Vegetais">
-                <span>🥦 Mais Vegetais</span>
-              </label>
-              <label class="interactive-chip">
-                <input type="checkbox" name="f-diet" value="Gramaturas Rigorosas da Nutri">
-                <span>📋 Gramaturas Rigorosas</span>
-              </label>
-            </div>
-          </div>
-
-          <!-- PASSO 8: OBSERVAÇÕES E GRAMATURAS -->
-          <div class="form-cell full-width">
-            <label for="f-obs">8. Gramaturas da sua dieta ou ingredientes que prefere evitar (Opcional):</label>
-            <textarea id="f-obs" rows="3" placeholder="Ex: Minha nutri prescreveu 140g de frango e 80g de batata-doce; ou não gosto de quiabo e prefiro purê de abóbora..."></textarea>
-          </div>
-
-          <div class="form-submit-row">
-            <button type="submit" id="btn-submit-form" class="btn btn-terracota btn-large btn-full btn-sheen">
-              <span>Montar Minha Dieta e Enviar no WhatsApp 📲</span>
-            </button>
-            <p class="form-submit-note">
-              🔒 Suas escolhas abrem diretamente na conversa do WhatsApp para combinarmos o lote da semana sem compromisso.
-            </p>
-          </div>
-        </form>
-      </div>
-    </div>
-  </section>
 
   <!-- RODAPÉ -->
   <footer class="site-footer">

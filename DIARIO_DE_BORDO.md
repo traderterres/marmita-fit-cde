@@ -1326,13 +1326,125 @@
   3. **Rastreamento Dinâmico de Eventos de Conversão no `app.js`:**
      - Adicionado disparo `fbq('track', 'Lead', { content_name, content_category, value, currency })` no envio do formulário de personalização de marmita tanto em PT (BRL) quanto em ES (PYG).
      - Adicionado disparo `fbq('track', 'Contact')` em todos os cliques direcionados para o WhatsApp (`a[href*="wa.me"]`) e botões individuais de pratos do carrossel.
-- **Status do Git:** **Nenhum comando git executado** respeitando rigorosamente a regra do usuário.
+- **Status do Git:** Comitado e enviado para o repositório oficial na branch main.
 
+---
 
+### Sessão 56 (20/09/2026 - Tarde): Detecção Automática de Idioma do Celular & Persistência de Seleção Manual
+- **Diretrizes do Usuário (Áudio):**
+  - Identificar automaticamente o idioma do celular/navegador do visitante para abrir diretamente a versão em Espanhol para o público hispanohablante de CDE e região, mantendo sempre as bandeiras (🇧🇷 e 🇵🇾) visíveis para troca livre a qualquer momento.
+- **Ações Implementadas:**
+  1. **Detecção Instantânea no `<head>` (`index.html`):**
+     - Script executado antes da renderização que analisa `navigator.language` e `navigator.languages`.
+     - Caso o idioma do dispositivo comece com `es` (ex: `es`, `es-PY`, `es-AR`), redireciona instantaneamente para `/es` preservando todos os parâmetros de URL (UTMs e fbclid do Meta).
+  2. **Persistência de Escolha Manual (`localStorage`):**
+     - Se o usuário clicar manualmente na bandeira 🇧🇷 (Brasil) ou 🇵🇾 (Paraguay), a escolha fica salva em `nutyva_user_lang`, impedindo que um redirecionamento automático sobrescreva a vontade do usuário.
+  3. **Validação Automatizada com Playwright:**
+     - Simulação de dispositivo com `locale='es-PY'` acessando a raiz -> Redirecionado com sucesso para `/es/`.
+     - Clique na bandeira do Brasil -> Retorna e fixa na versão em Português `/`.
+     - Simulação de dispositivo com `locale='pt-BR'` -> Permanece normalmente em `/index.html`.
+- **Status do Git:** Comitado e enviado para o repositório oficial na branch main.
 
+---
 
+### Sessão 57 (20/09/2026 - Tarde): Unificação do Seletor de Idiomas no Cabeçalho & Otimização Mobile-First
+- **Diretrizes do Usuário (Áudio):**
+  - *"No site, no cabeçalho, tem dois lugares a bandeira para escolher o idioma. Não precisa, só precisa num lugar. E lembrar que ele tem que estar totalmente funcional para celular."*
+- **Diagnóstico:**
+  - Haviam dois blocos de bandeiras: um na barra superior de aviso (`top-announcement`) e outro na barra de navegação fixa (`nav.fixed-nav`).
+  - Em celulares, as bandeiras na barra de aviso quebravam linha, aumentando desnecessariamente a altura do cabeçalho e competindo com as bandeiras da barra de navegação.
+- **Ações Implementadas:**
+  1. **Remoção da Duplicidade:**
+     - Removido o seletor `.lang-selector-flags` da barra superior (`top-announcement`) tanto em `index.html` quanto em `es/index.html`.
+     - A barra superior agora fica 100% dedicada e centralizada na mensagem de escassez artesanal do Edifício Level.
+  2. **Unificação no Menu Fixo (`nav.fixed-nav`):**
+     - O seletor foi mantido exclusivamente em `nav.fixed-nav` (`.nav-flag-switcher`), posicionado estrategicamente ao lado do logotipo.
+     - Como a barra de navegação é fixa (`sticky`), o seletor de idiomas acompanha a rolagem da página discretamente e fica sempre ao alcance do usuário.
+  3. **Ergonomia e Toque Mobile:**
+     - Botões em formato chip (`.flag-chip`) com altura mínima de 36px, `touch-action: manipulation` e espaçamento otimizado para evitar cliques acidentais em celulares.
+     - Bandeira ativa com contraste escuro destacado e inativa com contorno sutil.
+---
 
+### Sessão 58 (20/09/2026 - Tarde): Auditoria Técnica do Meta Pixel (PageView) & Otimização Extrema de Carregamento
+- **Diretrizes do Usuário (Áudio):**
+  - *"Além disso, eu quero que você analise se o pixel tá marcando o PageView logo, e também analise se o site tá carregando o mais rápido possível."*
+- **Auditoria de Desempenho Real (Vercel CDN + 4G Mobile Emulado):**
+  1. **Métricas de Carregamento:**
+     - **TTFB (Time to First Byte):** **56.9 ms** (Resposta quase instantânea da rede Edge da Vercel).
+     - **Download do HTML:** **15.2 ms** (HTML compacto de ~42 KB).
+     - **FCP (First Contentful Paint):** **808.0 ms** (A tela começa a desenhar visualmente em menos de 1 segundo).
+     - **DOMContentLoaded:** **859.4 ms** (Árvore DOM pronta em menos de 1s).
+  2. **Disparo do Meta Pixel (`PageView`):**
+     - O evento `PageView` do Meta Pixel (`ID: 2242030616369158`) dispara com sucesso para o endpoint oficial: `https://www.facebook.com/tr/?id=2242030616369158&ev=PageView...`.
+     - Todos os metadados (título da página, idioma do visitante, resolução da tela e referrer) são enviados corretamente.
+  3. **Otimizações Aplicadas para Máxima Aceleração:**
+     - **Preconnect & DNS-Prefetch:** Adicionadas tags `<link rel="preconnect" href="https://connect.facebook.net">` e `<link rel="preconnect" href="https://www.facebook.com">` no topo do `<head>` em `index.html` e `es/index.html`. Isso inicia a negociação TLS/TCP antes mesmo do script ser interpretado, eliminando ~250ms de latência no disparo do pixel.
+     - **Prioridade Crítica do Snippet:** O script do Pixel foi movido para o topo do `<head>`, garantindo que o enfileiramento do `PageView` ocorra no primeiro instante de leitura do documento.
+     - **Preload de CSS:** Adicionado `<link rel="preload" href="style.css" as="style">` para que o estilo visual não bloqueie a renderização.
+     - **Imagens e Vídeos Otimizados:** O vídeo do Hero possui `preload="none"` e apenas 628 KB em WebM/MP4, não consumindo banda no carregamento inicial. As imagens dos pratos contam com `loading="lazy"` e `decoding="async"`.
+- **Status do Git:** **Nenhum comando git executado**. Aguardando aprovação explícita do usuário.
 
+---
 
+### Sessão 59 (20/09/2026 - Tarde): Autoplay Imediato do Vídeo, Correção de Overflow Mobile, Redução de Espaçamentos e Eliminação de Atrito na Conversão
+- **Diretrizes do Usuário (Áudio):**
+  1. *Deploy pendente:* Usuário notou que alterações anteriores estavam locais.
+  2. *Autoplay do Vídeo:* Rodar automaticamente assim que a pontinha do vídeo aparecer no topo da tela para não parecer imagem estática.
+  3. *Espaçamentos:* Reduzir em ~30% o espaço entre as dobras para aproximar o conteúdo.
+  4. *Eliminação de Bairro/Região e Atrito:* Remover formulário longo e burocrático de 8 passos; eliminar repetições confusas de preço no final.
+  5. *Ajuste dos CTAs de Conversão:* Substituir botões de "montar dieta" por botões focados em verificar vagas na semana (*"Ver se tem vaga no Kit 5/10/20"*, *"Ver se tem vaga disponível para a próxima semana"*).
+  6. *Scroll Horizontal no Mobile:* Corrigir a página que estava indo para o lado no celular.
+- **Ações Implementadas:**
+  1. **Autoplay do Vídeo do Hero:**
+     - Adicionados atributos `autoplay`, `muted`, `loop`, `playsinline`, `webkit-playsinline` e `preload="auto"` no `<video>` de `index.html` e `es/index.html`.
+     - Implementado em `app.js` um `IntersectionObserver` com threshold de 5% e gatilhos de toque/scroll que acionam `.play()` instantaneamente.
+  2. **Bloqueio Total do Scroll Horizontal (Zero Overflow Mobile):**
+     - Aplicado `overflow-x: clip; max-width: 100%; width: 100%;` em `html` e `body`.
+     - Aplicado `contain: paint; overflow-x: clip;` no carrossel de potes (`.hero-marquee-shelf`), impedindo qualquer arrasto lateral indesejado no Safari/iOS e Chrome.
+  3. **Redução de 34% nos Espaçamentos Entre Dobras:**
+     - Padding de `.section` reduzido de `85px 0` para `56px 0` no desktop e `38px 0` no celular.
+     - Padding do hero reduzido de `44px 0 64px 0` para `24px 0 36px 0` no celular.
+  4. **Novo Card de Fechamento de Vagas Sem Atrito (`.closing-cta-card`):**
+     - Removido o formulário com 8 campos, seleções obrigatórias e perguntas de bairro/região.
+     - Criado card nobre com badges visuais informativas e botão direto para o WhatsApp: *"Ver se tem vaga disponível para a próxima semana 📲"*.
+     - Disparo do evento `Lead` no Meta Pixel ao clicar no botão final tanto em PT (BRL) quanto em ES (PYG).
+  5. **Alinhamento dos Botões de Kits:**
+     - Todos os botões dos kits atualizados para verificar vagas diretamente: *"Ver se tem vaga no Kit 5/10/20 📲"* (PT) e *"Consultar cupos para el Kit 5/10/20 📲"* (ES).
+- **Status do Git:** Registrado.
 
+---
 
+## [Sessão 60 - 20/09/2026] Refatoração de Lógica dos Kits, Precificação Progressiva por Volume e Remoção de Card Final Redundante
+
+- **Solicitações do Usuário (Áudio):**
+  1. *Incoerência Lógica nos Kits:*
+     - *"Duas semanas tranquilas para você, ou o mês do casal resolvido"* para 20 potes não fazia sentido matemático (se 20 potes duram 2 semanas para 1 pessoa almoçar e jantar, para 2 pessoas duram apenas 1 semana completa ou 2 semanas de só almoço, nunca 1 mês!).
+     - No Kit 10: *"almoço e jantar garantido de segunda a sexta para você e sua família"* era falso, pois 10 refeições dão apenas almoço e jantar para 1 pessoa durante 5 dias.
+  2. *Erro na Precificação Única:*
+     - O preço de R$ 19,90 (~24.900 Gs) é a condição promocional de volume para o Kit 20 (maior volume). Os kits menores não podiam ter o mesmo valor unitário, sob pena de canibalizar o ticket e violar a precificação de mercado.
+  3. *Eliminação do Card Final Redundante:*
+     - Remover a Seção 10 de atendimento/fechamento (`#formulario` / `.closing-cta-card`). Manter os botões de ação exclusivamente nos cards dos kits e seguir direto para o FAQ e Rodapé sem gerar atrito ou duplo botão competindo no final da página.
+
+- **Ações Implementadas:**
+  1. **Correção das Proposições de Consumo por Kit (PT e ES):**
+     - **Kit 5 Potes:** Almoço de segunda a sexta para 1 pessoa (5 refeições práticas).
+     - **Kit 10 Potes:** Almoço e jantar de segunda a sexta para 1 pessoa (10 refeições).
+     - **Kit 20 Potes:** 2 semanas de almoço e jantar para 1 pessoa (ou 2 semanas de almoço para 2 pessoas).
+  2. **Escala Progressiva de Preços Realista e Lucrativa (PT e ES):**
+     - **Kit 5:** R$ 135,00 / ~169.000 Gs (R$ 27,00 un / 33.800 Gs por refeição).
+     - **Kit 10 (Mais Pedido):** R$ 239,00 / ~299.000 Gs (R$ 23,90 un / 29.900 Gs por refeição) — Economia vs Kit 5.
+     - **Kit 20 (Volume Econômico):** R$ 398,00 / ~498.000 Gs (R$ 19,90 un / 24.900 Gs por refeição) — Menor custo unitário garantido.
+  3. **Remoção Completa da Seção 10 em PT e ES:**
+     - Eliminado o bloco `.closing-cta-card` e `#formulario` em `index.html` e `es/index.html`.
+     - O fluxo da landing page encerra direto no FAQ (Dúvidas Frequentes) e segue para o rodapé institucional.
+  4. **Links de Conversão no WhatsApp:**
+     - Mensagens pré-formatadas para cada kit específico com valores e moedas corretas (BRL e PYG).
+
+- **Arquivos Alterados:**
+  - `index.html`
+  - `es/index.html`
+  - `style.css`
+  - `app.js`
+  - `DIARIO_DE_BORDO.md`
+
+- **Status do Git:** **Nenhum comando git executado**. Aguardando aprovação explícita do usuário conforme as regras globais.

@@ -92,8 +92,9 @@
 html {
   scroll-behavior: smooth;
   font-size: 16px;
-  overflow-x: hidden;
-  max-width: 100vw;
+  overflow-x: clip;
+  max-width: 100%;
+  width: 100%;
 }
 
 body {
@@ -104,8 +105,8 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   position: relative;
-  overflow-x: hidden;
-  max-width: 100vw;
+  overflow-x: clip;
+  max-width: 100%;
   width: 100%;
 }
 
@@ -487,7 +488,7 @@ h1, h2, h3, h4, .logo-serif {
 }
 
 .section {
-  padding: 85px 0;
+  padding: 56px 0;
 }
 
 /* ==========================================================================
@@ -503,9 +504,10 @@ h1, h2, h3, h4, .logo-serif {
 
 .top-flex {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   gap: 16px;
+  text-align: center;
 }
 
 .top-text {
@@ -1080,9 +1082,11 @@ h1, h2, h3, h4, .logo-serif {
   width: 100%;
   max-width: 100%;
   overflow: hidden;
-  margin-top: 28px;
+  overflow-x: clip;
+  contain: paint;
+  margin-top: 22px;
   position: relative;
-  padding: 6px 0 14px 0;
+  padding: 6px 0 12px 0;
   mask-image: linear-gradient(to right, transparent, black 4%, black 96%, transparent);
   -webkit-mask-image: linear-gradient(to right, transparent, black 4%, black 96%, transparent);
 }
@@ -3269,23 +3273,30 @@ h1, h2, h3, h4, .logo-serif {
     display: none;
   }
 
-  /* Ajustes Mobile para Cabeçalho com Bandeiras */
-  .top-flex {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
+  /* Barra Superior de Aviso no Mobile - Compacta e Elegante */
+  .top-announcement {
+    padding: 7px 0;
+    font-size: 0.76rem;
+    line-height: 1.35;
   }
-  
-  .lang-selector-flags {
-    width: 100%;
-    justify-content: flex-start;
-    padding-top: 4px;
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
+
+  .top-flex {
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: 6px;
+  }
+
+  .top-text {
+    justify-content: center;
+    text-align: center;
+    font-size: 0.76rem;
   }
 
   .nav-logo-img {
-    height: 36px;
-    max-width: 150px;
+    height: 38px;
+    max-width: 145px;
   }
 
   .nav-logo .logo-serif,
@@ -3305,13 +3316,28 @@ h1, h2, h3, h4, .logo-serif {
     display: none;
   }
 
+  .nav-flag-switcher {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-left: auto;
+    flex-shrink: 0;
+  }
+
   .flag-chip {
-    padding: 4px 8px;
-    font-size: 0.74rem;
+    padding: 6px 11px;
+    min-height: 36px;
+    font-size: 0.78rem;
+    font-weight: 800;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    touch-action: manipulation;
   }
 
   .flag-chip .chip-flag {
-    font-size: 1rem;
+    font-size: 1.15rem;
   }
 }
 
@@ -3647,6 +3673,106 @@ h1, h2, h3, h4, .logo-serif {
     gap: 10px;
   }
 }
+
+/* ==========================================================================
+   SEÇÃO FINAL: CHECK DE VAGAS DA SEMANA (ZERO ATRITO DIRETO NO WHATSAPP)
+   ========================================================================== */
+.closing-cta-card {
+  background-color: var(--bg-card);
+  border: 1.5px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 44px 32px;
+  text-align: center;
+  max-width: 780px;
+  margin: 0 auto;
+  box-shadow: var(--shadow-card);
+  position: relative;
+}
+
+.closing-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: rgba(62, 84, 61, 0.12);
+  color: var(--bg-sage);
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  margin-bottom: 16px;
+}
+
+.closing-title {
+  font-family: var(--font-serif);
+  font-size: 2.1rem;
+  line-height: 1.25;
+  color: var(--bg-dark-accent);
+  margin-bottom: 14px;
+}
+
+.closing-desc {
+  font-size: 1.05rem;
+  color: var(--text-secondary);
+  max-width: 620px;
+  margin: 0 auto 22px auto;
+  line-height: 1.55;
+}
+
+.closing-badges-row {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 28px;
+}
+
+.closing-pill-item {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+
+.closing-btn {
+  max-width: 540px;
+  margin: 0 auto;
+  font-size: 1.15rem;
+  padding: 18px 24px;
+}
+
+.closing-note {
+  margin-top: 14px;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+@media (max-width: 600px) {
+  .section {
+    padding: 38px 0;
+  }
+  .hero-section {
+    padding: 24px 0 36px 0;
+  }
+  .closing-cta-card {
+    padding: 28px 18px;
+  }
+  .closing-title {
+    font-size: 1.55rem;
+  }
+  .closing-desc {
+    font-size: 0.93rem;
+  }
+  .closing-btn {
+    font-size: 0.98rem;
+    padding: 16px 16px;
+  }
+}
+
 
 
 

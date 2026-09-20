@@ -7,27 +7,28 @@
 const WHATSAPP_PHONE = "5551981338580";
 
 document.addEventListener("DOMContentLoaded", () => {
-  initOrderForm();
   initLanguageSelector();
   initStickyNav();
   initVideoTrigger();
   initShowcaseVideo();
   initRealDishesCarousel();
   initDynamicWhatsAppLinks();
+  initClosingCTA();
 });
 
-// Suporte a seletores dinâmicos de idioma se presentes
+// Suporte a seletores dinâmicos de idioma e persistência da escolha manual
 function initLanguageSelector() {
-  const toggles = document.querySelectorAll(".lang-toggle");
-  if (!toggles || toggles.length === 0) return;
-  toggles.forEach(toggle => {
-    toggle.addEventListener("click", () => {
-      const lang = toggle.getAttribute("data-lang");
-      if (lang === "es") {
-        window.location.href = window.location.pathname.includes("/es/") ? "index.html" : "es/index.html";
-      } else {
-        window.location.href = window.location.pathname.includes("/es/") ? "../index.html" : "index.html";
-      }
+  // Bandeira / Link de Português
+  document.querySelectorAll('a[href="/"], a[href="index.html"], a[href="../index.html"], [title*="Português"], [title*="Brasil"]').forEach(link => {
+    link.addEventListener("click", () => {
+      try { localStorage.setItem("nutyva_user_lang", "pt"); } catch(e) {}
+    });
+  });
+
+  // Bandeira / Link de Espanhol
+  document.querySelectorAll('a[href="/es"], a[href="es/index.html"], a[href="../es/index.html"], [title*="Español"], [title*="Paraguay"]').forEach(link => {
+    link.addEventListener("click", () => {
+      try { localStorage.setItem("nutyva_user_lang", "es"); } catch(e) {}
     });
   });
 }
@@ -41,167 +42,71 @@ function initVideoTrigger() {
   });
 }
 
+// Reprodução Imediata do Vídeo Demonstrativo ao Carregar e na Rolagem
 function initShowcaseVideo() {
   const video = document.querySelector(".hero-video-player");
   if (!video) return;
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || navigator.connection?.saveData) {
-    video.controls = true;
-    return;
-  }
 
-  const play = () => video.play().catch(() => { video.controls = true; });
-  if (!window.matchMedia("(max-width: 767px)").matches) {
-    play();
-    return;
-  }
+  video.muted = true;
+  video.defaultMuted = true;
+  video.playsInline = true;
 
-  const startWhenIdle = () => {
-    if ("requestIdleCallback" in window) {
-      window.requestIdleCallback(play, { timeout: 3000 });
-    } else {
-      window.setTimeout(play, 1500);
+  const tryPlay = () => {
+    const promise = video.play();
+    if (promise !== undefined) {
+      promise.catch(() => {});
     }
   };
-  if (document.readyState === "complete") startWhenIdle();
-  else window.addEventListener("load", startWhenIdle, { once: true });
+
+  // Tenta tocar imediatamente
+  tryPlay();
+
+  // Dispara autoplay logo que a pontinha (5%) do vídeo entrar na tela
+  if ("IntersectionObserver" in window) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          tryPlay();
+        }
+      });
+    }, { threshold: 0.05, rootMargin: "60px 0px" });
+    observer.observe(video);
+  }
+
+  // Toque ou scroll inicia imediatamente se o browser exigir gesto
+  window.addEventListener("touchstart", tryPlay, { once: true, passive: true });
+  window.addEventListener("scroll", tryPlay, { once: true, passive: true });
 }
 
-// 1. Gerador de Pedido via WhatsApp com Mensagem 100% Personalizada
-function initOrderForm() {
-  const form = document.getElementById("order-builder-form");
-  if (form) form.addEventListener("submit", (e) => {
-    e.preventDefault();
+// Rastreamento de Lead no Botão Final de Consulta de Vagas
+function initClosingCTA() {
+  const btnPt = document.getElementById("btn-ver-vagas-final");
+  if (btnPt) {
+    btnPt.addEventListener("click", () => {
+      if (typeof fbq === "function") {
+        fbq("track", "Lead", {
+          content_name: "Consulta de Vagas Semanais",
+          content_category: "Atendimento Direto",
+          value: 199.00,
+          currency: "BRL"
+        });
+      }
+    });
+  }
 
-    const name = document.getElementById("f-name")?.value.trim() || "";
-    const bairro = document.getElementById("f-bairro")?.value || "A combinar em CDE";
-    const kit = document.getElementById("f-kit")?.value || "Kit da Semana";
-    
-    // Objetivo da Dieta
-    const objetivoRadio = document.querySelector('input[name="f-objetivo"]:checked');
-    const objetivo = objetivoRadio ? objetivoRadio.value : "Manutenção & Comer Bem";
-
-    // Preferência de Proteínas
-    const proteinaRadio = document.querySelector('input[name="f-proteina"]:checked');
-    const proteina = proteinaRadio ? proteinaRadio.value : "Variado";
-
-    // Preferência de Carboidratos/Base
-    const carboRadio = document.querySelector('input[name="f-carbo"]:checked');
-    const carbo = carboRadio ? carboRadio.value : "Tradicional";
-
-    // Tags de dieta e restrições
-    const checkedTags = Array.from(document.querySelectorAll('input[name="f-diet"]:checked'))
-      .map(cb => cb.value);
-    const dieta = checkedTags.length > 0 ? checkedTags.join(", ") : "Sem restrições adicionais";
-
-    // Observações e gramaturas da nutri
-    const obs = document.getElementById("f-obs")?.value.trim() || "Nenhuma observação extra";
-
-    // Formato rico, claro e profissional para o WhatsApp:
-    const message = `Olá! Acabei de montar minha dieta e pedido no site da NUTYVA® Alimentação Saudável:
-👤 *Nome:* ${name}
-📍 *Bairro / Região:* ${bairro}
-📦 *Quantidade:* ${kit}
-🎯 *Objetivo:* ${objetivo}
-🥩 *Proteínas:* ${proteina}
-🍚 *Base / Carbo:* ${carbo}
-🥗 *Cuidados / Restrições:* ${dieta}
-📝 *Gramaturas / Detalhes:* ${obs}
-
-Gostaria de confirmar se ainda restam vagas no lote artesanal desta semana!`;
-
-    const waUrl = `https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(message)}`;
-
-    // Disparo Meta Pixel (Conversão Lead)
-    if (typeof fbq === "function") {
-      fbq("track", "Lead", {
-        content_name: "Montagem de Pedido / Cardápio",
-        content_category: kit,
-        value: kit.includes("10") ? 199.00 : (kit.includes("20") ? 398.00 : 99.50),
-        currency: "BRL"
-      });
-    }
-
-    // Feedback visual no botão
-    const submitBtn = document.getElementById("btn-submit-form");
-    if (submitBtn) {
-      const originalHtml = submitBtn.innerHTML;
-      submitBtn.innerHTML = "<span>✓ Abrindo WhatsApp...</span>";
-      submitBtn.style.backgroundColor = "#25D366";
-
-      setTimeout(() => {
-        submitBtn.innerHTML = originalHtml;
-        submitBtn.style.backgroundColor = "";
-      }, 3000);
-    }
-
-    // Abre o WhatsApp
-    window.open(waUrl, "_blank");
-  });
-
-  // Formulário em Espanhol
-  const formEs = document.getElementById("order-builder-form-es");
-  if (!formEs) return;
-
-  formEs.addEventListener("submit", (e) => {
-    e.preventDefault();
-
-    const name = document.getElementById("f-name-es")?.value.trim() || "";
-    const bairro = document.getElementById("f-bairro-es")?.value || "A coordinar en CDE";
-    const kit = document.getElementById("f-kit-es")?.value || "Kit de la Semana";
-    
-    const objetivoRadio = document.querySelector('input[name="f-objetivo-es"]:checked');
-    const objetivo = objetivoRadio ? objetivoRadio.value : "Mantenimiento & Comer Saludable";
-
-    const proteinaRadio = document.querySelector('input[name="f-proteina-es"]:checked');
-    const proteina = proteinaRadio ? proteinaRadio.value : "Variado";
-
-    const carboRadio = document.querySelector('input[name="f-carbo-es"]:checked');
-    const carbo = carboRadio ? carboRadio.value : "Tradicional";
-
-    const checkedTags = Array.from(document.querySelectorAll('input[name="f-diet-es"]:checked'))
-      .map(cb => cb.value);
-    const dieta = checkedTags.length > 0 ? checkedTags.join(", ") : "Sin restricciones adicionales";
-
-    const obs = document.getElementById("f-obs-es")?.value.trim() || "Ninguna indicación extra";
-
-    const message = `¡Hola! Acabo de armar mi dieta y pedido en la web de NUTYVA® Alimentación Saludable:
-👤 *Nombre:* ${name}
-📍 *Zona / Barrio:* ${bairro}
-📦 *Cantidad:* ${kit}
-🎯 *Objetivo:* ${objetivo}
-🥩 *Proteínas:* ${proteina}
-🍚 *Base / Carbohidratos:* ${carbo}
-🥗 *Cuidados / Restricciones:* ${dieta}
-📝 *Porciones / Detalles:* ${obs}
-
-¿Aún quedan cupos disponibles en el lote artesanal de esta semana?`;
-
-    const waUrl = `https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(message)}`;
-
-    // Disparo Meta Pixel (Conversão Lead ES)
-    if (typeof fbq === "function") {
-      fbq("track", "Lead", {
-        content_name: "Armado de Viandas ES",
-        content_category: kit,
-        value: kit.includes("10") ? 249000 : (kit.includes("20") ? 498000 : 125000),
-        currency: "PYG"
-      });
-    }
-
-    const submitBtn = document.getElementById("btn-submit-form-es");
-    if (submitBtn) {
-      const originalHtml = submitBtn.innerHTML;
-      submitBtn.innerHTML = "<span>✓ Abriendo WhatsApp...</span>";
-      submitBtn.style.backgroundColor = "#25D366";
-      
-      setTimeout(() => {
-        submitBtn.innerHTML = originalHtml;
-        submitBtn.style.backgroundColor = "";
-      }, 3000);
-    }
-
-    window.open(waUrl, "_blank");
-  });
+  const btnEs = document.getElementById("btn-ver-vagas-final-es");
+  if (btnEs) {
+    btnEs.addEventListener("click", () => {
+      if (typeof fbq === "function") {
+        fbq("track", "Lead", {
+          content_name: "Consulta de Cupos Semanales",
+          content_category: "Atención Directa",
+          value: 249000,
+          currency: "PYG"
+        });
+      }
+    });
+  }
 }
 
 // 3. Efeito sutil no scroll para a barra de navegação
