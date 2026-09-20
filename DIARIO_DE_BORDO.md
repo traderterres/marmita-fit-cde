@@ -1312,6 +1312,23 @@
      - Nova pergunta e resposta em PT e ES explicando transparentemente por que a produção atende exclusivamente 25 famílias por semana (diferenciação da comida industrial congelada de supermercado vs cozinha artesanal do Edifício Level).
 - **Status do Git:** **Nenhum comando git executado** até a aprovação formal do usuário.
 
+---
+
+### Sessão 55 (20/09/2026 - Manhã): Instalação Oficial do Meta Pixel (ID: 2242030616369158) e Rastreamento de Leads
+- **Diretrizes do Usuário (Áudio):**
+  - Entrar na BM/Conta da Marmita (`act_6221771397937517`), obter o ID do Pixel e instalar no site do projeto da marmita.
+- **Ações Implementadas:**
+  1. **Auditoria e Identificação do Pixel:**
+     - Pixel Oficial da Marmita Fit identificado via Graph API: ID `2242030616369158` (Nome: `Pixel Marmita`).
+  2. **Instalação do Código Base do Meta Pixel:**
+     - Inserido no `<head>` de `index.html` (versão em Português) com disparo padrão de `fbq('track', 'PageView')` e fallback em `<noscript>`.
+     - Inserido no `<head>` de `es/index.html` (versão em Espanhol) com disparo padrão de `fbq('track', 'PageView')` e fallback em `<noscript>`.
+  3. **Rastreamento Dinâmico de Eventos de Conversão no `app.js`:**
+     - Adicionado disparo `fbq('track', 'Lead', { content_name, content_category, value, currency })` no envio do formulário de personalização de marmita tanto em PT (BRL) quanto em ES (PYG).
+     - Adicionado disparo `fbq('track', 'Contact')` em todos os cliques direcionados para o WhatsApp (`a[href*="wa.me"]`) e botões individuais de pratos do carrossel.
+- **Status do Git:** **Nenhum comando git executado** respeitando rigorosamente a regra do usuário.
+
+
 
 
 
